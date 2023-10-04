@@ -1,0 +1,44 @@
+[
+  {
+    "id": "001",
+    "quota_verified": false,
+    "name": "JD Reichenbach",
+    "year": "2023",
+    "company": "Route",
+    "title": "Business Development Rep. (BDR)",
+    "market": "SMB",
+    "quota_attainment_percent": "227.00%",
+    "avg_deal_size": "$5k - $10k",
+    "avg_sales_cycle": "30 Days",
+    "industry": "EdTech",
+    "leaderboard_rank": "#2"
+  },
+  {
+    "id": "002",
+    "quota_verified": false,
+    "name": "JD Reichenbach",
+    "year": "2022",
+    "company": "NerdWallet",
+    "title": "Account Executive (AE)",
+    "market": "SMB",
+    "quota_attainment_percent": "122.79%",
+    "avg_deal_size": "$5k - $10k",
+    "avg_sales_cycle": "30 Days",
+    "industry": "Fintech",
+    "leaderboard_rank": "#25"
+  },
+  {
+    "id": "003",
+    "quota_verified": false,
+    "name": "JD Reichenbach",
+    "year": "2021",
+    "company": "Array",
+    "title": "Account Executive (AE)",
+    "market": "SMB",
+    "quota_attainment_percent": "192.00%",
+    "avg_deal_size": "$5k - $10k",
+    "avg_sales_cycle": "30 Days",
+    "industry": "Software as a Service (SaaS)",
+    "leaderboard_rank": "#30"
+  }
+]
