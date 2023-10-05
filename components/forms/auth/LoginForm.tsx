@@ -1,23 +1,21 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import Alert from 'react-bootstrap/Alert';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+
 import { useAppDispatch } from '@/lib/store/redux';
 import { userLogin } from '@/lib/store/authSlice';
 import { useLogin } from '@/lib/auth';
-import axios from 'axios';
+import { LoginFormInputs } from '@/types/user';
 
-interface LoginFormInputs {
-  username: string;
-  password: string;
-}
+import Alert from 'react-bootstrap/Alert';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const LoginForm = () => {
-  const dispatch = useAppDispatch();
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const [error, setError] = useState('');
   const USER_LOCAL_STORAGE_KEY = 'USER_KEY';
   const { register, handleSubmit } = useForm<LoginFormInputs>();
@@ -44,11 +42,9 @@ const LoginForm = () => {
           apiUser.token = response.data.access;
           apiUser.refresh = response.data.refresh;
           localStorage.setItem(USER_LOCAL_STORAGE_KEY, JSON.stringify(apiUser));
-          localStorage.setItem('AUTHTOKEN', JSON.stringify(await user.access));
-          localStorage.setItem(
-            'REFRESH_TOKEN',
-            JSON.stringify(await user.refresh)
-          );
+          localStorage.setItem('AUTHTOKEN', JSON.stringify(user.access));
+          localStorage.setItem('REFRESH_TOKEN', JSON.stringify(user.refresh));
+          // set user data in global state
           dispatch(userLogin(apiUser));
           router.push('/profile');
         } catch (error: any) {

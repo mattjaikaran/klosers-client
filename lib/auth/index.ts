@@ -51,7 +51,7 @@ export const tokenHeaders = () => {
   const headers = {
     'Content-Type': 'application/json',
     'X-CSRFToken': Cookies.get('csrftoken'),
-    Authorization: `Bearer ${user.data.token}`,
+    Authorization: `Bearer ${user?.data?.token}`,
   };
   return headers;
 };

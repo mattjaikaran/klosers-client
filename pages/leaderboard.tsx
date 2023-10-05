@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import MainLayout from '@/layouts/MainLayout';
+import AuthLayout from '@/layouts/AuthLayout';
 import Container from 'react-bootstrap/Container';
 import LeaderboardTable from '@/components/tables/LeaderboardTable';
 
@@ -12,12 +12,12 @@ export default function Leaderboard() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <MainLayout>
+      <AuthLayout>
         <Container>
-          <h1>Leaderboard</h1>
+          <h2>Leaderboard</h2>
           <LeaderboardTable />
         </Container>
-      </MainLayout>
+      </AuthLayout>
     </>
   );
 }

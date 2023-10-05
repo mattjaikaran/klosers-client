@@ -1,24 +1,16 @@
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import Link from 'next/link';
+
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useRouter } from 'next/router';
+import { useSignup } from '@/lib/auth';
+import { RegisterFormInputs } from '@/types/user';
+
 import Alert from 'react-bootstrap/Alert';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { useRouter } from 'next/router';
-import { useSignup } from '@/lib/auth';
-import Link from 'next/link';
-
-// const API_URL = process.env.NEXT_PUBLIC_API_URL;
-interface RegisterFormInputs {
-  first_name: string;
-  last_name: string;
-  username: string;
-  email: string;
-  password1: string;
-  password2: string;
-  password?: string;
-}
 
 const schema = yup
   .object({

@@ -1,5 +1,10 @@
 import useAxios from '@/lib/utils/axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
+
+import { useAppSelector } from '@/lib/store/redux';
+import { useRouter } from 'next/router';
+import { CareerStatInputs } from '@/types/stats';
+
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import {
@@ -9,21 +14,9 @@ import {
   jobTitleChoices,
   marketChoices,
 } from './constants';
-import { useAppSelector } from '@/lib/store/redux';
 
-export interface CareerStatInputs {
-  year: string;
-  company: string;
-  title: string;
-  market: string;
-  quota_attainment_percentage: string;
-  avg_deal_size: string;
-  avg_sales_cycle: string;
-  industry?: string;
-  leaderboard_rank?: string;
-}
-
-const NewCareerStatForm = ({ closeModal }: { closeModal: any }) => {
+const NewCareerStatForm = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -46,13 +39,12 @@ const NewCareerStatForm = ({ closeModal }: { closeModal: any }) => {
         avg_deal_size: data.avg_deal_size,
         avg_sales_cycle: data.avg_sales_cycle,
         industry: data.industry,
-        leaderboard_rank: data.leaderboard_rank,
       };
       console.log('newCareerStat', newCareerStat);
       const response = await api.post('/career-stats/', newCareerStat);
       console.log('response', response);
       if (response.status === 201) {
-        closeModal();
+        router.push('/profile');
       }
       return response;
     } catch (error) {
@@ -153,19 +145,11 @@ const NewCareerStatForm = ({ closeModal }: { closeModal: any }) => {
           ))}
         </Form.Select>
       </Form.Group>
-      <Form.Group className="mb-3" controlId="formCareerStatLeaderboardRank">
-        <Form.Label>Leaderboard Rank</Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="#2"
-          {...register('leaderboard_rank')}
-        />
-      </Form.Group>
       <div className="mt-4">
         <Button variant="primary" type="submit">
           Submit
         </Button>
-        <Button variant="light" onClick={closeModal}>
+        <Button variant="light" onClick={() => router.push('/profile')}>
           Cancel
         </Button>
       </div>

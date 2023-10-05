@@ -2,16 +2,15 @@ import useAxios from '@/lib/utils/axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { AwardRecognitionInputs } from './NewAwardRecognitionForm';
+import { AwardRecognitionInputs } from '@/types/stats';
+import { useRouter } from 'next/router';
 
-// wip
 const EditAwardRecognitionForm = ({
   item,
-  closeModal,
 }: {
-  item: any;
-  closeModal: any;
+  item: AwardRecognitionInputs;
 }) => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -30,7 +29,7 @@ const EditAwardRecognitionForm = ({
       );
       console.log('response', response);
       if (response.status === 200) {
-        closeModal();
+        router.push('/profile');
       }
       return response;
     } catch (error) {
@@ -62,7 +61,7 @@ const EditAwardRecognitionForm = ({
         <Button variant="primary" type="submit">
           Submit
         </Button>
-        <Button variant="light" onClick={closeModal}>
+        <Button variant="light" onClick={() => router.push('/profile')}>
           Cancel
         </Button>
       </div>

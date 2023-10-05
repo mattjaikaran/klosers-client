@@ -10,27 +10,20 @@ import {
   jobTitleChoices,
   marketChoices,
 } from './constants';
-import { useAppSelector } from '@/lib/store/redux';
+import { useAppDispatch, useAppSelector } from '@/lib/store/redux';
+import { useRouter } from 'next/router';
+import { YTDStatInputs } from './types';
+import { getUserYTDStats } from '@/lib/store/authSlice';
 
-export interface YTDStatInputs {
-  quarter: string;
-  company: string;
-  title: string;
-  market: string;
-  quota_attainment_percentage: string;
-  avg_deal_size: string;
-  avg_sales_cycle: string;
-  industry?: string;
-  leaderboard_rank?: string;
-}
-
-const NewYTDStatForm = ({ closeModal }: { closeModal: any }) => {
+const NewYTDStatForm = ({ closeModal }: { closeModal?: any }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<YTDStatInputs>();
   const api = useAxios();
+  const router = useRouter();
+  const dispatch = useAppDispatch();
   const data: any = useAppSelector((state) => state.auth);
   const user: any = data.user.data;
 
@@ -47,13 +40,15 @@ const NewYTDStatForm = ({ closeModal }: { closeModal: any }) => {
         avg_deal_size: data.avg_deal_size,
         avg_sales_cycle: data.avg_sales_cycle,
         industry: data.industry,
-        leaderboard_rank: data.leaderboard_rank,
       };
       console.log('newYtdStat', newYtdStat);
       const response = await api.post('/ytd-stats/', newYtdStat);
       console.log('response', response);
       if (response.status === 201) {
-        closeModal();
+        const ytdResponse = await api.get('/ytd-stats/');
+        dispatch(getUserYTDStats(ytdResponse.data));
+
+        if (ytdResponse.status === 200) router.push('/profile');
       }
       return response;
     } catch (error) {
@@ -154,19 +149,11 @@ const NewYTDStatForm = ({ closeModal }: { closeModal: any }) => {
           ))}
         </Form.Select>
       </Form.Group>
-      <Form.Group className="mb-3" controlId="formYTDStatLeaderboardRank">
-        <Form.Label>Leaderboard Rank</Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="#2"
-          {...register('leaderboard_rank')}
-        />
-      </Form.Group>
       <div className="mt-4">
         <Button variant="primary" type="submit">
           Submit
         </Button>
-        <Button variant="light" onClick={closeModal}>
+        <Button variant="light" onClick={() => router.push('/profile')}>
           Cancel
         </Button>
       </div>

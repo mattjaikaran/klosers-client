@@ -10,39 +10,36 @@ import {
   jobTitleChoices,
   marketChoices,
 } from './constants';
+import { useRouter } from 'next/router';
 
-const EditCareerStatForm = ({
-  item,
-  closeModal,
-}: {
-  item: any;
-  closeModal: any;
-}) => {
+const EditCareerStatForm = ({ item }: { item: any }) => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<CareerStatInputs>();
+  } = useForm<CareerStatInputs>({
+    defaultValues: item,
+  });
   const api = useAxios();
 
   const onSubmit: SubmitHandler<CareerStatInputs> = async (data) => {
     try {
       console.log(data);
       const itemData = {
-        quarter: data.year ?? item.year,
-        company: data.company ?? item.company,
-        title: data.title ?? item.title,
-        market: data.market ?? item.market,
-        avg_sales_cycle: data.avg_sales_cycle ?? item.average_sales_cycle,
-        avg_deal_size: data.avg_deal_size ?? item.average_deal_size,
-        industry: data.industry ?? item.industry,
-        leaderboard_rank: data.leaderboard_rank ?? item.leaderboard_rank,
+        quarter: data.year,
+        company: data.company,
+        title: data.title,
+        market: data.market,
+        avg_sales_cycle: data.avg_sales_cycle,
+        avg_deal_size: data.avg_deal_size,
+        industry: data.industry,
       };
       console.log('itemData', itemData);
       const response = await api.patch(`/career-stats/${item.id}/`, itemData);
       console.log('response', response);
       if (response.status === 200) {
-        closeModal();
+        router.push('/profile');
       }
       return response;
     } catch (error) {
@@ -166,20 +163,11 @@ const EditCareerStatForm = ({
           ))}
         </Form.Select>
       </Form.Group>
-      <Form.Group className="mb-3" controlId="formCareerStatLeaderboardRank">
-        <Form.Label>Leaderboard Rank</Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="#2"
-          defaultValue={item.leaderboard_rank}
-          {...register('leaderboard_rank')}
-        />
-      </Form.Group>
       <div className="mt-4">
         <Button variant="primary" type="submit">
           Submit
         </Button>
-        <Button variant="light" onClick={closeModal}>
+        <Button variant="light" onClick={() => router.push('/profile')}>
           Cancel
         </Button>
       </div>

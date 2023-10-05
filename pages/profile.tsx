@@ -1,42 +1,53 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useAppDispatch, useAppSelector } from '@/lib/store/redux';
+import useAxios from '@/lib/utils/axios';
 import AuthLayout from '@/layouts/AuthLayout';
+
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
+
 import YTDStatsTable from '@/components/tables/YTDStatsTable';
 import CareerStatsTable from '@/components/tables/CareerStatsTable';
 import AwardsRecognition from '@/components/AwardsRecognition';
-import useAxios from '@/lib/utils/axios';
-import { useRouter } from 'next/router';
-import { useAppSelector } from '@/lib/store/redux';
+
 import avatar from '@/assets/images/avatar-placeholder.png';
+import {
+  getUserCareerStats,
+  getUserYTDStats,
+  getUserAwards,
+} from '@/lib/store/authSlice';
 
 export default function Profile() {
   const api = useAxios();
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const { user }: any = useAppSelector((state) => state.auth);
-  const [userYtdStats, setUserYtdStats] = useState<any>([]);
-  const [userCareerStats, setUserCareerStats] = useState<any>([]);
-  const [userAwards, setUserAwards] = useState<any>([]);
+
   useEffect(() => {
     const renderUserData = async () => {
       try {
         const ytdResponse = await api.get('/ytd-stats/');
         const careerResponse = await api.get('/career-stats/');
         const awardResponse = await api.get('/awards-recognition-stats/');
-        setUserYtdStats(ytdResponse.data);
-        setUserCareerStats(careerResponse.data);
-        setUserAwards(awardResponse.data);
+        console.log('ytdResponse.data', ytdResponse.data);
+        console.log('careerResponse.data', careerResponse.data);
+        console.log('awardResponse.data', awardResponse.data);
+        dispatch(getUserCareerStats(careerResponse.data));
+        dispatch(getUserYTDStats(ytdResponse.data));
+        dispatch(getUserAwards(awardResponse.data));
       } catch (error) {
         console.error('error', error);
       }
     };
     renderUserData();
   }, []);
+
   return (
     <>
       <Head>
@@ -101,7 +112,8 @@ export default function Profile() {
               <h4 className="d-inline">
                 <span>fit score.</span>
               </h4>
-              <h2 className="text-primary">{user.data.user_fit_score}%</h2>
+              {/* <h2 className="text-primary">{user.data.user_fit_score}%</h2> */}
+              <h4 className="mt-3">Coming Soon</h4>
               <p className="px-md-5">
                 Weighted score based on high value categories to fit your
                 company profile and parameters.
@@ -115,11 +127,11 @@ export default function Profile() {
             </Col>
           </Row>
           <h5>YTD Stats</h5>
-          <YTDStatsTable data={userYtdStats} />
+          <YTDStatsTable data={user.ytdStats} />
           <h5>Career Stats</h5>
-          <CareerStatsTable data={userCareerStats} />
+          <CareerStatsTable data={user.careerStats} />
 
-          <AwardsRecognition data={userAwards} />
+          <AwardsRecognition data={user.awards} />
         </Container>
       </AuthLayout>
     </>

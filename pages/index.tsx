@@ -4,7 +4,6 @@ import MainLayout from '@/layouts/MainLayout';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import { signIn, signOut, useSession } from 'next-auth/react';
-import styles from '@/styles/Home.module.css';
 
 export default function Home() {
   const router = useRouter();

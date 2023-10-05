@@ -37,7 +37,7 @@ const AuthHeader = ({
   return (
     <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand as={Link} href="/">
+        <Navbar.Brand as={Link} href="/dashboard">
           Klosers
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />

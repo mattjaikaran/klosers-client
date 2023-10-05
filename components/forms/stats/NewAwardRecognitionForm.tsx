@@ -1,21 +1,20 @@
 import useAxios from '@/lib/utils/axios';
 import { useAppSelector } from '@/lib/store/redux';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { AwardRecognitionInputs } from '@/types/stats';
+
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import { useRouter } from 'next/router';
 
-export interface AwardRecognitionInputs {
-  type: string;
-  text: string;
-}
-
-const NewAwardRecognitionForm = ({ closeModal }: { closeModal: any }) => {
+const NewAwardRecognitionForm = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<AwardRecognitionInputs>();
   const api = useAxios();
+  const router = useRouter();
   const data: any = useAppSelector((state) => state.auth);
   const user: any = data.user.data;
 
@@ -34,7 +33,7 @@ const NewAwardRecognitionForm = ({ closeModal }: { closeModal: any }) => {
       );
       console.log('response', response);
       if (response.status === 201) {
-        closeModal();
+        router.push('/profile');
       }
       return response;
     } catch (error) {
@@ -60,7 +59,7 @@ const NewAwardRecognitionForm = ({ closeModal }: { closeModal: any }) => {
         <Button variant="primary" type="submit">
           Submit
         </Button>
-        <Button variant="light" onClick={closeModal}>
+        <Button variant="light" onClick={() => router.push('/profile')}>
           Cancel
         </Button>
       </div>
