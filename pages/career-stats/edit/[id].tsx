@@ -20,6 +20,7 @@ const EditCareerStat = () => {
       <AuthLayout>
         <Container>
           <h2>Edit Career Stat</h2>
+
           <EditCareerStatForm
             item={
               user.careerStats.filter(

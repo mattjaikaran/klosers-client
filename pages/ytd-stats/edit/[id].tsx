@@ -12,7 +12,7 @@ const EditYTDStat = () => {
   return (
     <div>
       <Head>
-        <title>New YTD Stat | Kloser Sales Platform</title>
+        <title>Edit YTD Stat | Kloser Sales Platform</title>
         <meta name="description" content="Kloser sales platform" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />

@@ -27,7 +27,7 @@ const EditCareerStatForm = ({ item }: { item: any }) => {
     try {
       console.log(data);
       const itemData = {
-        quarter: data.year,
+        year: data.year,
         company: data.company,
         title: data.title,
         market: data.market,
@@ -48,7 +48,7 @@ const EditCareerStatForm = ({ item }: { item: any }) => {
   };
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-      <Form.Group className="mb-3" controlId="formCareerStatQuarter">
+      <Form.Group className="mb-3" controlId="formCareerStatYear">
         <Form.Label>Year</Form.Label>
         <Form.Control
           type="text"
