@@ -11,18 +11,22 @@ const AwardsRecognition = ({ data }: { data: AwardRecognitionInputs[] }) => {
   return (
     <div className="mt-3">
       <h5>Awards &amp; Recognition</h5>
-      {data.map((award: AwardRecognitionInputs) => (
-        <p key={award.id}>
-          <Button
-            variant="link"
-            className="text-muted"
-            onClick={() => router.push(`/awards/edit/${award.id}`)}
-          >
-            Edit
-          </Button>
-          <span>{award.text}</span>
-        </p>
-      ))}
+      {data?.length ? (
+        data.map((award: AwardRecognitionInputs) => (
+          <p key={award.id}>
+            <Button
+              variant="link"
+              className="text-muted"
+              onClick={() => router.push(`/awards/edit/${award.id}`)}
+            >
+              Edit
+            </Button>
+            <span>{award.text}</span>
+          </p>
+        ))
+      ) : (
+        <p>No Awards</p>
+      )}
 
       <Button
         className="mt-3 pill-btn"
