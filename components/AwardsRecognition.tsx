@@ -1,12 +1,9 @@
 import { useRouter } from 'next/router';
 import Button from 'react-bootstrap/Button';
-import Spinner from 'react-bootstrap/Spinner';
 import { AwardRecognitionInputs } from '@/types/stats';
 
 const AwardsRecognition = ({ data }: { data: AwardRecognitionInputs[] }) => {
   const router = useRouter();
-
-  if (!data?.length) return <Spinner />;
 
   return (
     <div className="mt-3">
