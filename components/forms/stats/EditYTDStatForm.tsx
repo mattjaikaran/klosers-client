@@ -16,7 +16,7 @@ import {
   jobTitleChoices,
   marketChoices,
 } from './constants';
-import { YTDStatInputs } from './types';
+import { YTDStatInputs } from '@/types/stats';
 
 const EditYTDStatForm = ({ item }: { item: any }) => {
   const {

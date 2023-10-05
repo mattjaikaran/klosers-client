@@ -1,5 +1,9 @@
 import useAxios from '@/lib/utils/axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { useAppDispatch, useAppSelector } from '@/lib/store/redux';
+import { useRouter } from 'next/router';
+import { getUserYTDStats } from '@/lib/store/authSlice';
+
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import {
@@ -10,10 +14,7 @@ import {
   jobTitleChoices,
   marketChoices,
 } from './constants';
-import { useAppDispatch, useAppSelector } from '@/lib/store/redux';
-import { useRouter } from 'next/router';
-import { YTDStatInputs } from './types';
-import { getUserYTDStats } from '@/lib/store/authSlice';
+import { YTDStatInputs } from '@/types/stats';
 
 const NewYTDStatForm = ({ closeModal }: { closeModal?: any }) => {
   const {

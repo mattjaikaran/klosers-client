@@ -2,7 +2,6 @@ import useAxios from '@/lib/utils/axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { CareerStatInputs } from './NewCareerStatForm';
 import {
   salesCycleChoices,
   dealSizeChoices,
@@ -11,6 +10,7 @@ import {
   marketChoices,
 } from './constants';
 import { useRouter } from 'next/router';
+import { CareerStatInputs } from '@/types/stats';
 
 const EditCareerStatForm = ({ item }: { item: any }) => {
   const router = useRouter();
