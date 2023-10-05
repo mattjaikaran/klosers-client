@@ -1,19 +1,7 @@
-import { useState } from 'react';
 import Table from 'react-bootstrap/Table';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
 import data from '@/data/stats.json';
 
 const LeaderboardTable = () => {
-  const [show, setShow] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
-
-  // Add modal
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-  // Edit modal
-  const handleCloseEditModal = () => setShowEditModal(false);
-  const handleShowEditModal = () => setShowEditModal(true);
   return (
     <>
       <Table responsive>
@@ -50,20 +38,6 @@ const LeaderboardTable = () => {
           ))}
         </tbody>
       </Table>
-      <Modal show={showEditModal} onHide={handleCloseEditModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Career Stat</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Editform</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseEditModal}>
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={handleCloseEditModal}>
-            Submit
-          </Button>
-        </Modal.Footer>
-      </Modal>
     </>
   );
 };

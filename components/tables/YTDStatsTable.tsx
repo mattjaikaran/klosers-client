@@ -8,6 +8,9 @@ import { YTDStatInputs } from '@/types/stats';
 
 const YTDStatsTable = ({ data }: { data: YTDStatInputs[] }) => {
   const router = useRouter();
+
+  if (!data?.length) return <Spinner />;
+
   return (
     <>
       <Table responsive striped>
@@ -26,38 +29,34 @@ const YTDStatsTable = ({ data }: { data: YTDStatInputs[] }) => {
           </tr>
         </thead>
         <tbody>
-          {data.length ? (
-            data.map((item: YTDStatInputs) => (
-              <tr key={item.id}>
-                <td>
-                  {item.quota_verified ? (
-                    <img src={checkmark.src} alt="checkmark" />
-                  ) : (
-                    '-'
-                  )}
-                </td>
-                <td>{item.quarter}</td>
-                <td>{item.company}</td>
-                <td>{item.title}</td>
-                <td>{item.market}</td>
-                <td>{item.quota_attainment_percentage}</td>
-                <td>{item.average_deal_size}</td>
-                <td>{item.average_sales_cycle}</td>
-                <td>{item.industry}</td>
-                <td>
-                  <Button
-                    variant="link"
-                    className="text-muted"
-                    onClick={() => router.push(`/ytd-stats/edit/${item.id}`)}
-                  >
-                    Edit
-                  </Button>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <Spinner />
-          )}
+          {data.map((item: YTDStatInputs) => (
+            <tr key={item.id}>
+              <td>
+                {item.quota_verified ? (
+                  <img src={checkmark.src} alt="checkmark" />
+                ) : (
+                  '-'
+                )}
+              </td>
+              <td>{item.quarter}</td>
+              <td>{item.company}</td>
+              <td>{item.title}</td>
+              <td>{item.market}</td>
+              <td>{item.quota_attainment_percentage}</td>
+              <td>{item.average_deal_size}</td>
+              <td>{item.average_sales_cycle}</td>
+              <td>{item.industry}</td>
+              <td>
+                <Button
+                  variant="link"
+                  className="text-muted"
+                  onClick={() => router.push(`/ytd-stats/edit/${item.id}`)}
+                >
+                  Edit
+                </Button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </Table>
       <Button

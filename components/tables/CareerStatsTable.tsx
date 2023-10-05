@@ -8,6 +8,9 @@ import { CareerStatInputs } from '@/types/stats';
 
 const CareerStatsTable = ({ data }: { data: CareerStatInputs[] }) => {
   const router = useRouter();
+
+  if (!data?.length) return <Spinner />;
+
   return (
     <>
       <Table responsive striped>
@@ -26,38 +29,34 @@ const CareerStatsTable = ({ data }: { data: CareerStatInputs[] }) => {
           </tr>
         </thead>
         <tbody>
-          {data.length ? (
-            data.map((item: CareerStatInputs) => (
-              <tr key={item.id}>
-                <td>
-                  {item.quota_verified ? (
-                    <img src={checkmark.src} alt="checkmark" />
-                  ) : (
-                    '-'
-                  )}
-                </td>
-                <td>{item.year}</td>
-                <td>{item.company}</td>
-                <td>{item.title}</td>
-                <td>{item.market}</td>
-                <td>{item.quota_attainment_percentage}</td>
-                <td>{item.average_deal_size}</td>
-                <td>{item.average_sales_cycle}</td>
-                <td>{item.industry}</td>
-                <td>
-                  <Button
-                    variant="link"
-                    className="text-muted"
-                    onClick={() => router.push(`/career-stats/edit/${item.id}`)}
-                  >
-                    Edit
-                  </Button>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <Spinner />
-          )}
+          {data.map((item: CareerStatInputs) => (
+            <tr key={item.id}>
+              <td>
+                {item.quota_verified ? (
+                  <img src={checkmark.src} alt="checkmark" />
+                ) : (
+                  '-'
+                )}
+              </td>
+              <td>{item.year}</td>
+              <td>{item.company}</td>
+              <td>{item.title}</td>
+              <td>{item.market}</td>
+              <td>{item.quota_attainment_percentage}</td>
+              <td>{item.average_deal_size}</td>
+              <td>{item.average_sales_cycle}</td>
+              <td>{item.industry}</td>
+              <td>
+                <Button
+                  variant="link"
+                  className="text-muted"
+                  onClick={() => router.push(`/career-stats/edit/${item.id}`)}
+                >
+                  Edit
+                </Button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </Table>
       <Button
