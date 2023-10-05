@@ -67,7 +67,7 @@ const CareerStatsTable = ({ data }: { data: CareerStatInputs[] }) => {
         variant="outline-primary"
         onClick={() => router.push(`/career-stats/new`)}
       >
-        Add Year
+        Add Career Stat
       </Button>
     </>
   );

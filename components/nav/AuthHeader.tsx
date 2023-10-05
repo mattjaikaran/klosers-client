@@ -37,32 +37,38 @@ const AuthHeader = ({
   return (
     <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand as={Link} href="/dashboard">
+        <Navbar.Brand
+          as={Link}
+          href="/dashboard"
+          className="with-marker mb-3 mb-lg-2"
+        >
           Klosers
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={Link} href="/dashboard">
+            <Nav.Link as={Link} href="/dashboard" className="mt-lg-3">
               Dashboard
             </Nav.Link>
-            <Nav.Link as={Link} href="/profile">
+            <Nav.Link as={Link} href="/profile" className="mt-lg-3">
               Profile
             </Nav.Link>
             {/* eslint-disable-next-line react-hooks/rules-of-hooks */}
-            <Nav.Link onClick={() => handleLogout()}>Logout</Nav.Link>
+            <Nav.Link onClick={() => handleLogout()} className="mt-lg-3">
+              Logout
+            </Nav.Link>
           </Nav>
           <Nav>
-            <Nav.Link as={Link} href="/">
+            <Nav.Link as={Link} href="/" className="mt-lg-3">
               Kloser Network
             </Nav.Link>
-            {/* <Nav.Link eventKey={2} as={Link} href="/leaderboard">
+            {/* <Nav.Link eventKey={2} as={Link} href="/leaderboard" className="mt-lg-3">
               Kloser Leaderboard
             </Nav.Link> */}
-            {/* <Nav.Link as={Link} href="/">
+            {/* <Nav.Link as={Link} href="/" className="mt-lg-3">
               Twitter
             </Nav.Link>
-            <Nav.Link as={Link} href="/">
+            <Nav.Link as={Link} href="/" className="mt-lg-3">
               LinkedIn
             </Nav.Link> */}
           </Nav>

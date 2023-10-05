@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
-import checkmark from '@/assets/icons/checkmark.svg';
 import { useRouter } from 'next/router';
+import checkmark from '@/assets/icons/checkmark.svg';
 import { YTDStatInputs } from '@/types/stats';
 
 const YTDStatsTable = ({ data }: { data: YTDStatInputs[] }) => {
