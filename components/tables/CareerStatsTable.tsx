@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
-import Spinner from 'react-bootstrap/Spinner';
 import checkmark from '@/assets/icons/checkmark.svg';
 import { useRouter } from 'next/router';
 import { CareerStatInputs } from '@/types/stats';

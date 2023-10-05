@@ -1,15 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
-import Spinner from 'react-bootstrap/Spinner';
 import checkmark from '@/assets/icons/checkmark.svg';
 import { useRouter } from 'next/router';
 import { YTDStatInputs } from '@/types/stats';
 
 const YTDStatsTable = ({ data }: { data: YTDStatInputs[] }) => {
   const router = useRouter();
-
-  if (!data?.length) return <Spinner />;
 
   return (
     <>
