@@ -56,7 +56,7 @@ const NewCareerStatForm = () => {
       <Form.Group className="mb-3" controlId="formCareerStatQuarter">
         <Form.Label>Year</Form.Label>
         <Form.Control
-          type="text"
+          type="number"
           placeholder="2023"
           {...register('year')}
           required
@@ -100,7 +100,7 @@ const NewCareerStatForm = () => {
       >
         <Form.Label>Percent Quota Attainment</Form.Label>
         <Form.Control
-          type="text"
+          type="number"
           placeholder="Enter % Quota Attainment"
           {...register('quota_attainment_percentage')}
           required

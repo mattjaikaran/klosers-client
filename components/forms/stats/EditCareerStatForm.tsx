@@ -51,7 +51,7 @@ const EditCareerStatForm = ({ item }: { item: any }) => {
       <Form.Group className="mb-3" controlId="formCareerStatYear">
         <Form.Label>Year</Form.Label>
         <Form.Control
-          type="text"
+          type="number"
           placeholder="2023"
           defaultValue={item.year}
           {...register('year')}
@@ -105,7 +105,7 @@ const EditCareerStatForm = ({ item }: { item: any }) => {
       >
         <Form.Label>Percent Quota Attainment</Form.Label>
         <Form.Control
-          type="text"
+          type="number"
           placeholder="Enter % Quota Attainment"
           defaultValue={item.quota_attainment_percentage}
           {...register('quota_attainment_percentage')}

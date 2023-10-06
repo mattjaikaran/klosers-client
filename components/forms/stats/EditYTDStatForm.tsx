@@ -81,7 +81,7 @@ const EditYTDStatForm = ({ item }: { item: any }) => {
         <Form.Group className="mb-3" controlId="formYTDStatCompany">
           <Form.Label>Company</Form.Label>
           <Form.Control
-            type="text"
+            type="number"
             defaultValue={item.company}
             placeholder="Enter Company"
             {...register('company')}
@@ -123,7 +123,7 @@ const EditYTDStatForm = ({ item }: { item: any }) => {
         >
           <Form.Label>Percent Quota Attainment</Form.Label>
           <Form.Control
-            type="text"
+            type="number"
             defaultValue={item.quota_attainment_percentage}
             placeholder="Enter % Quota Attainment"
             {...register('quota_attainment_percentage')}

@@ -106,7 +106,7 @@ const NewYTDStatForm = ({ closeModal }: { closeModal?: any }) => {
       >
         <Form.Label>Percent Quota Attainment</Form.Label>
         <Form.Control
-          type="text"
+          type="number"
           placeholder="Enter % Quota Attainment"
           {...register('quota_attainment_percentage')}
         />
