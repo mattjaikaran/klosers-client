@@ -13,7 +13,8 @@ h1 {
 .btn-primary {
   background-color: #f2e7fc !important;
   color: $primary !important;
-  border-color: #f2e7fc !important;
+  border-color: $primary !important;
+  border: 1.5px solid $primary;
 }
 .btn-outline-primary {
   background-color: #fff !important;
@@ -21,7 +22,7 @@ h1 {
   color: $primary !important;
 }
 .pill-btn {
-  border-radius: 1rem !important;
+  border-radius: 1.5rem !important;
   padding: 0.5rem 1rem !important;
 }
 

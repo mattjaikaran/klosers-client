@@ -14,7 +14,6 @@ export default function Leaderboard() {
       </Head>
       <AuthLayout>
         <Container>
-          <h2>Leaderboard</h2>
           <LeaderboardTable />
         </Container>
       </AuthLayout>

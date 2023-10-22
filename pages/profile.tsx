@@ -58,7 +58,6 @@ export default function Profile() {
       </Head>
       <AuthLayout>
         <Container>
-          <h2>Profile</h2>
           <Row className="mt-3">
             <Col md={6}>
               <Row>
@@ -68,6 +67,7 @@ export default function Profile() {
                     alt="avatar placeholder"
                     roundedCircle
                   />
+                  <p className="mt-5">Edit Profile</p>
                 </Col>
                 <Col>
                   <p>
@@ -102,6 +102,10 @@ export default function Profile() {
                       LinkedIn
                     </a>
                   </p>
+                  <Button className="pill-btn">Share Profile</Button>
+                  <Button variant="outline-primary" className="pill-btn mx-2">
+                    Message
+                  </Button>
                 </Col>
               </Row>
             </Col>

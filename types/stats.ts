@@ -33,3 +33,16 @@ export interface AwardRecognitionInputs {
   type: string;
   text: string;
 }
+
+export interface LeaderboardStat {
+  quota_verified: boolean;
+  year: number | string;
+  company: string;
+  title: string;
+  market: string;
+  quota_attainment_percent: string;
+  avg_deal_size: string;
+  avg_sales_cycle: string;
+  leaderboard_rank?: number;
+  industry: string;
+}
