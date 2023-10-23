@@ -1,19 +1,73 @@
-import { useState, useReducer } from 'react';
+/* eslint-disable @next/next/no-img-element */
+import { useState, useReducer, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import {
+  ColumnFiltersState,
+  FilterFn,
+  SortingFn,
   SortingState,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getFacetedMinMaxValues,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  getFilteredRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
+  sortingFns,
   useReactTable,
 } from '@tanstack/react-table';
 import checkmark from '@/assets/icons/checkmark.svg';
+import filter from '@/assets/icons/filter.svg';
 import defaultData from '@/data/stats.json';
 import { LeaderboardStat } from '@/types/stats';
+
+import {
+  RankingInfo,
+  rankItem,
+  compareItems,
+} from '@tanstack/match-sorter-utils';
+
+declare module '@tanstack/table-core' {
+  interface FilterFns {
+    fuzzy: FilterFn<unknown>;
+  }
+  interface FilterMeta {
+    itemRank: RankingInfo;
+  }
+}
+
+const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
+  // Rank the item
+  const itemRank = rankItem(row.getValue(columnId), value);
+
+  // Store the itemRank info
+  addMeta({
+    itemRank,
+  });
+
+  // Return if the item should be filtered in/out
+  return itemRank.passed;
+};
+
+const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
+  let dir = 0;
+
+  // Only sort by rank if the column has ranking information
+  if (rowA.columnFiltersMeta[columnId]) {
+    dir = compareItems(
+      rowA.columnFiltersMeta[columnId]?.itemRank!,
+      rowB.columnFiltersMeta[columnId]?.itemRank!
+    );
+  }
+
+  // Provide an alphanumeric fallback for when the item ranks are equal
+  return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir;
+};
 
 const columnHelper = createColumnHelper<LeaderboardStat>();
 const columns = [
@@ -64,21 +118,72 @@ const LeaderboardTable = () => {
 
   const [sorting, setSorting] = useState<SortingState>([]);
 
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [globalFilter, setGlobalFilter] = useState('');
+
   const table = useReactTable({
     data,
     columns,
-    state: {
-      sorting,
+    filterFns: {
+      fuzzy: fuzzyFilter,
     },
-    onSortingChange: setSorting,
+    state: {
+      columnFilters,
+      globalFilter,
+    },
+    onColumnFiltersChange: setColumnFilters,
+    onGlobalFilterChange: setGlobalFilter,
+    globalFilterFn: fuzzyFilter,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
+    getFacetedMinMaxValues: getFacetedMinMaxValues(),
     debugTable: true,
+    debugHeaders: true,
+    debugColumns: false,
   });
+
+  // A debounced input react component
+  function DebouncedInput({
+    value: initialValue,
+    onChange,
+    debounce = 500,
+    ...props
+  }: {
+    value: string | number;
+    onChange: (value: string | number) => void;
+    debounce?: number;
+  } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>) {
+    const [value, setValue] = useState(initialValue);
+
+    useEffect(() => {
+      setValue(initialValue);
+    }, [initialValue]);
+
+    useEffect(() => {
+      const timeout = setTimeout(() => {
+        onChange(value);
+      }, debounce);
+
+      return () => clearTimeout(timeout);
+    }, [value]);
+
+    return (
+      <input
+        {...props}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
+    );
+  }
+
   return (
     <>
       <Row>
-        <Col md={6} className="mb-3">
+        <Col lg={7} md={6} className="mb-3">
           <Row>
             <Col xs={3} sm={4} md={5} lg={4} xl={4}>
               <h2 className="with-marker">Klosers</h2>
@@ -89,7 +194,10 @@ const LeaderboardTable = () => {
           </Row>
         </Col>
         <Col>
-          <h4>Filters</h4>
+          <div>
+            <h4 className="mb-3 d-inline me-1">Filters</h4>
+            <img src={filter.src} width={24} alt="filter icon" />
+          </div>
           <Button className="pill-btn">Quota Verified</Button>
           <Button className="pill-btn m-1" variant="outline-primary">
             Quarter
@@ -112,21 +220,28 @@ const LeaderboardTable = () => {
           <Button className="pill-btn m-1" variant="outline-primary">
             Avg Sales Cycle
           </Button>
-          <Button className="pill-btn m-1" variant="outline-primary">
-            Leaderboard Rank
-          </Button>
-          <Button className="pill-btn m-1" variant="outline-primary">
-            Company
-          </Button>
+          <div>
+            <DebouncedInput
+              value={globalFilter ?? ''}
+              onChange={(value) => setGlobalFilter(String(value))}
+              className="mt-3 p-2 font-lg border border-block"
+              placeholder="Search all columns..."
+            />
+          </div>
         </Col>
       </Row>
-      <Table responsive striped>
+      <Table className="mt-3" responsive striped>
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <th key={header.id} colSpan={header.colSpan}>
+                  <th
+                    key={header.id}
+                    className="text-primary fw-medium"
+                    colSpan={header.colSpan}
+                  >
+                    <img src={filter.src} width={24} alt="filter icon" />
                     {header.isPlaceholder ? null : (
                       <div
                         {...{

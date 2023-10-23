@@ -1,7 +1,7 @@
 [
   {
     "id": "001",
-    "quota_verified": false,
+    "quota_verified": true,
     "name": "JD Reichenbach",
     "year": "2023",
     "company": "Route",
