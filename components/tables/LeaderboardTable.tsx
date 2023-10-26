@@ -169,6 +169,7 @@ const LeaderboardTable = () => {
       }, debounce);
 
       return () => clearTimeout(timeout);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value]);
 
     return (
@@ -198,7 +199,12 @@ const LeaderboardTable = () => {
             <h4 className="mb-3 d-inline me-1">Filters</h4>
             <img src={filter.src} width={24} alt="filter icon" />
           </div>
-          <Button className="pill-btn">Quota Verified</Button>
+          <Button
+            className="pill-btn"
+            // onClick={(e: any) => setGlobalFilter('route')}
+          >
+            Quota Verified
+          </Button>
           <Button className="pill-btn m-1" variant="outline-primary">
             Quarter
           </Button>
@@ -238,10 +244,15 @@ const LeaderboardTable = () => {
                 return (
                   <th
                     key={header.id}
-                    className="text-primary fw-medium"
+                    className="text-blue fw-medium"
                     colSpan={header.colSpan}
                   >
-                    <img src={filter.src} width={24} alt="filter icon" />
+                    <img
+                      onClick={header.column.getToggleSortingHandler()}
+                      src={filter.src}
+                      width={24}
+                      alt="filter icon"
+                    />
                     {header.isPlaceholder ? null : (
                       <div
                         {...{
@@ -256,8 +267,8 @@ const LeaderboardTable = () => {
                           header.getContext()
                         )}
                         {{
-                          asc: ' 🔼',
-                          desc: ' 🔽',
+                          // asc: ' 🔼',
+                          // desc: ' 🔽',
                         }[header.column.getIsSorted() as string] ?? null}
                       </div>
                     )}

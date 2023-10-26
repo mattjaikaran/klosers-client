@@ -23,6 +23,12 @@ export const authSlice = createSlice({
       };
       state.isLoggedIn = true;
     },
+    updateUserDetails: (state, action) => {
+      state.user = {
+        ...state.user,
+        data: action.payload,
+      };
+    },
     getUserCareerStats: (state, action) => {
       state.user = {
         ...state.user,
@@ -57,6 +63,7 @@ export const authSlice = createSlice({
 
 export const {
   userLogin,
+  updateUserDetails,
   getUserCareerStats,
   getUserYTDStats,
   getUserAwards,

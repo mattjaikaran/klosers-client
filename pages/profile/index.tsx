@@ -22,6 +22,7 @@ import {
   getUserYTDStats,
   getUserAwards,
 } from '@/lib/store/authSlice';
+import Link from 'next/link';
 
 export default function Profile() {
   const api = useAxios();
@@ -67,7 +68,9 @@ export default function Profile() {
                     alt="avatar placeholder"
                     roundedCircle
                   />
-                  <p className="mt-5">Edit Profile</p>
+                  <p className="mt-5">
+                    <Link href="/profile/edit">Edit Profile</Link>
+                  </p>
                 </Col>
                 <Col>
                   <p>
@@ -87,6 +90,10 @@ export default function Profile() {
                   <p>
                     <strong>Market: </strong>
                     <span>{user.data.market_type}</span>
+                  </p>
+                  <p>
+                    <strong>Status: </strong>
+                    <span>{user.data.user_status}</span>
                   </p>
                   <p>
                     <strong>All Time Revenue: </strong>
@@ -109,25 +116,9 @@ export default function Profile() {
                 </Col>
               </Row>
             </Col>
-            <Col md={6} className="text-center">
-              <h2 className="d-inline">
-                <span className="with-marker">Klosers</span>{' '}
-              </h2>
-              <h4 className="d-inline">
-                <span>fit score.</span>
-              </h4>
-              {/* <h2 className="text-primary">{user.data.user_fit_score}%</h2> */}
-              <h4 className="mt-3">Coming Soon</h4>
-              <p className="px-md-5">
-                Weighted score based on high value categories to fit your
-                company profile and parameters.
-              </p>
-              <Button
-                className="pill-btn"
-                onClick={() => router.push('/leaderboard')}
-              >
-                Kloser Leaderboard {'>'}
-              </Button>
+            <Col md={6}>
+              <h4>About</h4>
+              <p>{user.data.about}</p>
             </Col>
           </Row>
           <h5>YTD Stats</h5>

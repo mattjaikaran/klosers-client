@@ -5,12 +5,12 @@ export const quarterChoices = [
   { value: 4, label: 'Q4' },
 ];
 
+const CONSUMER_DIRECT = 'Consumer';
+const SMALL_BUSINESS = 'Small Business';
+const MID_MARKET = 'Mid Market';
+const ENTERPRISE = 'Enterprise';
+const BUSINESS_DEVELOPMENT = 'Business Development';
 
-const CONSUMER_DIRECT = "Consumer"
-const SMALL_BUSINESS = "Small Business"
-const MID_MARKET = "Mid Market"
-const ENTERPRISE = "Enterprise"
-const BUSINESS_DEVELOPMENT = "Business Development"
 export const marketChoices = [
   { value: CONSUMER_DIRECT, label: 'Consumer Direct Sales' },
   { value: SMALL_BUSINESS, label: 'SMB (Small Business) Sales' },
@@ -43,45 +43,83 @@ export const salesCycleChoices = [
   { value: '>120', label: '> 120 Days' },
 ];
 
-
 export const jobTitleChoices = [
-  { value: 'Chief Revenue Officer (CRO)', label: 'Chief Revenue Officer (CRO)' },
-  { value: 'Chief Marketing Officer (CMO)', label: 'Chief Marketing Officer (CMO)' },
+  {
+    value: 'Chief Revenue Officer (CRO)',
+    label: 'Chief Revenue Officer (CRO)',
+  },
+  {
+    value: 'Chief Marketing Officer (CMO)',
+    label: 'Chief Marketing Officer (CMO)',
+  },
   { value: 'VP of Sales', label: 'VP of Sales' },
   { value: 'Head of Sales', label: 'Head of Sales' },
   { value: 'Account Executive', label: 'Account Executive' },
   { value: 'Sr. Account Executive', label: 'Sr. Account Executive' },
-  { value: 'Strategic Account Executive', label: 'Strategic Account Executive' },
-  { value: 'Mid Market Account Executive', label: 'Mid Market Account Executive' },
-  { value: 'Enterprise Account Executive', label: 'Enterprise Account Executive' },
+  {
+    value: 'Strategic Account Executive',
+    label: 'Strategic Account Executive',
+  },
+  {
+    value: 'Mid Market Account Executive',
+    label: 'Mid Market Account Executive',
+  },
+  {
+    value: 'Enterprise Account Executive',
+    label: 'Enterprise Account Executive',
+  },
   { value: 'Director of Marketing', label: 'Director of Marketing' },
   { value: 'Sr. Director of Marketing', label: 'Sr. Director of Marketing' },
   { value: 'Product Marketing Manager', label: 'Product Marketing Manager' },
   { value: 'Market Research Analyst', label: 'Market Research Analyst' },
   { value: 'Sales Manager', label: 'Sales Manager' },
-  { value: 'Sales Development Representative', label: 'Sales Development Representative' },
-  { value: 'Business Development Representative', label: 'Business Development Representative' },
-  { value: 'Business Development Manager', label: 'Business Development Manager' },
+  {
+    value: 'Sales Development Representative',
+    label: 'Sales Development Representative',
+  },
+  {
+    value: 'Business Development Representative',
+    label: 'Business Development Representative',
+  },
+  {
+    value: 'Business Development Manager',
+    label: 'Business Development Manager',
+  },
   { value: 'Brand Manager', label: 'Brand Manager' },
   { value: 'Marketing Coordinator', label: 'Marketing Coordinator' },
   { value: 'Content Strategist', label: 'Content Strategist' },
   { value: 'Customer Success Manager', label: 'Customer Success Manager' },
-  { value: 'Sr. Customer Success Manager', label: 'Sr. Customer Success Manager' },
+  {
+    value: 'Sr. Customer Success Manager',
+    label: 'Sr. Customer Success Manager',
+  },
   { value: 'Market Strategist', label: 'Market Strategist' },
   { value: 'Channel Sales Manager', label: 'Channel Sales Manager' },
   { value: 'Partner Manager', label: 'Partner Manager' },
-  { value: 'Sales Enablement Specialist', label: 'Sales Enablement Specialist' },
-  { value: 'Customer Experience Manager', label: 'Customer Experience Manager' },
+  {
+    value: 'Sales Enablement Specialist',
+    label: 'Sales Enablement Specialist',
+  },
+  {
+    value: 'Customer Experience Manager',
+    label: 'Customer Experience Manager',
+  },
   { value: 'Data Analyst', label: 'Data Analyst' },
   { value: 'User Acquisition Manager', label: 'User Acquisition Manager' },
-  { value: 'Demand Generation Specialist', label: 'Demand Generation Specialist' },
+  {
+    value: 'Demand Generation Specialist',
+    label: 'Demand Generation Specialist',
+  },
 ];
 
 export const industryChoices = [
   { value: 'IT', label: 'Information Technology (IT) Services' },
   { value: 'CYBERSECURITY', label: 'Cybersecurity' },
   { value: 'SAAS', label: 'Software as a Service (SaaS)' },
-  { value: 'AI_ML', label: 'Artificial Intelligence (AI) and Machine Learning (ML)' },
+  {
+    value: 'AI_ML',
+    label: 'Artificial Intelligence (AI) and Machine Learning (ML)',
+  },
   { value: 'HARDWARE', label: 'Hardware' },
   { value: 'TELECOMMUNICATIONS', label: 'Telecommunications' },
   { value: 'E_COMMERCE', label: 'E-commerce Platforms' },
