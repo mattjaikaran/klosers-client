@@ -39,7 +39,7 @@ export interface User {
 
 // user status types
 export const OPEN_TO_OPPORTUNITIES = 'Open to New Opportunities';
-export const ACTIVELY_LOOKING = 'Actively Looking for New Roles';
+export const ACTIVELY_LOOKING = 'Actively Looking for New Role';
 export const WILL_TAKE_CALL = 'Will Take the Call';
 export const NOT_INTERESTED = 'Not Interested in New Opportunities';
 
