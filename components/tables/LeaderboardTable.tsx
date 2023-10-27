@@ -105,9 +105,6 @@ const columns = [
   columnHelper.accessor('avg_sales_cycle', {
     header: 'Avg Sales Cycle',
   }),
-  columnHelper.accessor('leaderboard_rank', {
-    header: 'Leaderboard Rank',
-  }),
   columnHelper.accessor('industry', {
     header: 'Industry',
   }),
