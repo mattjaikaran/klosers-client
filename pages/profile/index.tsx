@@ -24,14 +24,14 @@ import {
 } from '@/lib/store/authSlice';
 import Link from 'next/link';
 
-export default function Profile() {
+export default function MyProfile() {
   const api = useAxios();
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { user }: any = useAppSelector((state) => state.auth);
 
   useEffect(() => {
-    const renderUserData = async () => {
+    const renderMyUserData = async () => {
       try {
         const ytdResponse = await api.get('/ytd-stats/');
         const careerResponse = await api.get('/career-stats/');
@@ -46,7 +46,7 @@ export default function Profile() {
         console.error('error', error);
       }
     };
-    renderUserData();
+    renderMyUserData();
   }, []);
 
   return (
@@ -94,15 +94,6 @@ export default function Profile() {
                   <p>
                     <strong>Status: </strong>
                     <span>{user.data.user_status}</span>
-                  </p>
-                  <p>
-                    <strong>All Time Revenue: </strong>
-                    <span>
-                      $
-                      {parseInt(user.data.all_time_revenue).toLocaleString(
-                        'en-US'
-                      )}
-                    </span>
                   </p>
                   <p>
                     <a href={user.data.linkedin_profile} target="_blank">

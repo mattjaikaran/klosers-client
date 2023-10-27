@@ -13,7 +13,7 @@ export default function Leaderboard() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AuthLayout>
-        <Container>
+        <Container fluid="xl">
           <LeaderboardTable />
         </Container>
       </AuthLayout>

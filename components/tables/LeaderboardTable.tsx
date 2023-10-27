@@ -4,6 +4,7 @@ import Table from 'react-bootstrap/Table';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import Dropdown from 'react-bootstrap/Dropdown';
 import {
   ColumnFiltersState,
   FilterFn,
@@ -275,6 +276,7 @@ const LeaderboardTable = () => {
                   </th>
                 );
               })}
+              <th>Actions</th>
             </tr>
           ))}
         </thead>
@@ -292,6 +294,20 @@ const LeaderboardTable = () => {
                     </td>
                   );
                 })}
+                <td>
+                  <Dropdown>
+                    <Dropdown.Toggle
+                      variant="outline-primary"
+                      id="dropdown-basic"
+                    >
+                      Actions
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                      <Dropdown.Item>Request Intro</Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </td>
               </tr>
             );
           })}

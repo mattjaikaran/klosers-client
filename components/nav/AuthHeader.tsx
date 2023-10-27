@@ -47,8 +47,8 @@ const AuthHeader = ({
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={Link} href="/dashboard" className="mt-lg-3">
-              Dashboard
+            <Nav.Link as={Link} href="/leaderboard" className="mt-lg-3">
+              Leaderboard
             </Nav.Link>
             <Nav.Link as={Link} href="/profile" className="mt-lg-3">
               Profile
@@ -62,15 +62,6 @@ const AuthHeader = ({
             <Nav.Link as={Link} href="/" className="mt-lg-3">
               Kloser Network
             </Nav.Link>
-            {/* <Nav.Link eventKey={2} as={Link} href="/leaderboard" className="mt-lg-3">
-              Kloser Leaderboard
-            </Nav.Link> */}
-            {/* <Nav.Link as={Link} href="/" className="mt-lg-3">
-              Twitter
-            </Nav.Link>
-            <Nav.Link as={Link} href="/" className="mt-lg-3">
-              LinkedIn
-            </Nav.Link> */}
           </Nav>
         </Navbar.Collapse>
       </Container>
