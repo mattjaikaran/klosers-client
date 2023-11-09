@@ -49,6 +49,6 @@ export const {
   getUserAwards,
 } = userSlice.actions;
 
-export const selectUser = (state: typeof initialState) => state.user.user;
+export const selectUser = (state: typeof initialState) => state.user;
 
 export default userSlice.reducer;
