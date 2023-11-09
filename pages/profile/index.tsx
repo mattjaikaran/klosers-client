@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelector } from '@/lib/store/redux';
 import useAxios from '@/lib/utils/axios';
@@ -18,11 +19,10 @@ import AwardsRecognition from '@/components/AwardsRecognition';
 
 import avatar from '@/assets/images/avatar-placeholder.png';
 import {
-  getUserCareerStats,
-  getUserYTDStats,
-  getUserAwards,
+  getMyUserCareerStats,
+  getMyUserYTDStats,
+  getMyUserAwards,
 } from '@/lib/store/authSlice';
-import Link from 'next/link';
 
 export default function MyProfile() {
   const api = useAxios();
@@ -39,9 +39,9 @@ export default function MyProfile() {
         console.log('ytdResponse.data', ytdResponse.data);
         console.log('careerResponse.data', careerResponse.data);
         console.log('awardResponse.data', awardResponse.data);
-        dispatch(getUserCareerStats(careerResponse.data));
-        dispatch(getUserYTDStats(ytdResponse.data));
-        dispatch(getUserAwards(awardResponse.data));
+        dispatch(getMyUserCareerStats(careerResponse.data));
+        dispatch(getMyUserYTDStats(ytdResponse.data));
+        dispatch(getMyUserAwards(awardResponse.data));
       } catch (error) {
         console.error('error', error);
       }

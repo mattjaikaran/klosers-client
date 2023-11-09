@@ -11,6 +11,7 @@ export interface YTDStatInputs {
   average_deal_size?: string;
   average_sales_cycle?: string;
   industry?: string;
+  user?: string | number;
 }
 
 export interface CareerStatInputs {
@@ -26,12 +27,14 @@ export interface CareerStatInputs {
   average_deal_size?: string;
   average_sales_cycle?: string;
   industry?: string;
+  user?: string | number;
 }
 
 export interface AwardRecognitionInputs {
   id?: string;
   type: string;
   text: string;
+  user?: string | number;
 }
 
 export interface LeaderboardStat {
@@ -45,4 +48,5 @@ export interface LeaderboardStat {
   avg_sales_cycle: string;
   leaderboard_rank?: number;
   industry: string;
+  user?: string | number;
 }

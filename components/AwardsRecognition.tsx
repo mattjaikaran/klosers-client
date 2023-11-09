@@ -1,9 +1,12 @@
 import { useRouter } from 'next/router';
 import Button from 'react-bootstrap/Button';
 import { AwardRecognitionInputs } from '@/types/stats';
+import { useAppSelector } from '@/lib/store/redux';
 
 const AwardsRecognition = ({ data }: { data: AwardRecognitionInputs[] }) => {
   const router = useRouter();
+  const auth: any = useAppSelector((state) => state.auth);
+  const { user }: any = useAppSelector((state) => state.user);
 
   return (
     <div className="mt-3">
@@ -25,13 +28,15 @@ const AwardsRecognition = ({ data }: { data: AwardRecognitionInputs[] }) => {
         <p>No Awards</p>
       )}
 
-      <Button
-        className="mt-3 pill-btn"
-        variant="outline-primary"
-        onClick={() => router.push(`/awards/new`)}
-      >
-        Add Award
-      </Button>
+      {auth.user.data.username === user.data.username ? (
+        <Button
+          className="mt-3 pill-btn"
+          variant="outline-primary"
+          onClick={() => router.push(`/awards/new`)}
+        >
+          Add Award
+        </Button>
+      ) : null}
     </div>
   );
 };

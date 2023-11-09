@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { useState, useReducer } from 'react';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import { useRouter } from 'next/router';
@@ -21,12 +22,12 @@ import {
   getPaginationRowModel,
   sortingFns,
 } from '@tanstack/react-table';
-import { useState, useReducer } from 'react';
 import {
   RankingInfo,
   rankItem,
   compareItems,
 } from '@tanstack/match-sorter-utils';
+import { useAppDispatch, useAppSelector } from '@/lib/store/redux';
 declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>;
@@ -66,6 +67,8 @@ const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
 
 const YTDStatsTable = ({ data }: { data: YTDStatInputs[] }) => {
   const router = useRouter();
+  const auth: any = useAppSelector((state) => state.auth);
+  const { user }: any = useAppSelector((state) => state.user);
 
   const columnHelper = createColumnHelper<YTDStatInputs>();
   const columns = [
@@ -211,13 +214,15 @@ const YTDStatsTable = ({ data }: { data: YTDStatInputs[] }) => {
           )}
         </tbody>
       </Table>
-      <Button
-        className="my-3 pill-btn"
-        variant="outline-primary"
-        onClick={() => router.push('/ytd-stats/new')}
-      >
-        Add YTD Stat
-      </Button>
+      {auth.user.data.username === user.data.username ? (
+        <Button
+          className="my-3 pill-btn"
+          variant="outline-primary"
+          onClick={() => router.push('/ytd-stats/new')}
+        >
+          Add YTD Stat
+        </Button>
+      ) : null}
     </>
   );
 };

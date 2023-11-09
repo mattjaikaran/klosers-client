@@ -23,25 +23,25 @@ export const authSlice = createSlice({
       };
       state.isLoggedIn = true;
     },
-    updateUserDetails: (state, action) => {
+    updateMyUserDetails: (state, action) => {
       state.user = {
         ...state.user,
         data: action.payload,
       };
     },
-    getUserCareerStats: (state, action) => {
+    getMyUserCareerStats: (state, action) => {
       state.user = {
         ...state.user,
         careerStats: action.payload,
       };
     },
-    getUserYTDStats: (state, action) => {
+    getMyUserYTDStats: (state, action) => {
       state.user = {
         ...state.user,
         ytdStats: action.payload,
       };
     },
-    getUserAwards: (state, action) => {
+    getMyUserAwards: (state, action) => {
       state.user = {
         ...state.user,
         awards: action.payload,
@@ -63,13 +63,13 @@ export const authSlice = createSlice({
 
 export const {
   userLogin,
-  updateUserDetails,
-  getUserCareerStats,
-  getUserYTDStats,
-  getUserAwards,
+  updateMyUserDetails,
+  getMyUserCareerStats,
+  getMyUserYTDStats,
+  getMyUserAwards,
   userLogout,
 } = authSlice.actions;
 
 //Selectors - this is how we pull information from the global store slice
-export const getUser = (state: typeof initialState) => state.user;
+export const getMyUser = (state: typeof initialState) => state.user;
 export default authSlice.reducer;

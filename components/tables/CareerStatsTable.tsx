@@ -28,6 +28,7 @@ import {
   rankItem,
   compareItems,
 } from '@tanstack/match-sorter-utils';
+import { useAppSelector } from '@/lib/store/redux';
 declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>;
@@ -67,6 +68,8 @@ const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
 
 const CareerStatsTable = ({ data }: { data: CareerStatInputs[] }) => {
   const router = useRouter();
+  const auth: any = useAppSelector((state) => state.auth);
+  const { user }: any = useAppSelector((state) => state.user);
 
   const columnHelper = createColumnHelper<CareerStatInputs>();
   const columns = [
@@ -212,17 +215,16 @@ const CareerStatsTable = ({ data }: { data: CareerStatInputs[] }) => {
           )}
         </tbody>
       </Table>
-      <Button
-        className="my-3 pill-btn"
-        variant="outline-primary"
-        onClick={() => router.push(`/career-stats/new`)}
-      >
-        Add Career Stat
-      </Button>
+      {auth.user.data.username === user.data.username ? (
+        <Button
+          className="my-3 pill-btn"
+          variant="outline-primary"
+          onClick={() => router.push(`/career-stats/new`)}
+        >
+          Add Career Stat
+        </Button>
+      ) : null}
     </>
   );
 };
 export default CareerStatsTable;
-function setColumnFilters(updaterOrValue: Updater<ColumnFiltersState>): void {
-  throw new Error('Function not implemented.');
-}

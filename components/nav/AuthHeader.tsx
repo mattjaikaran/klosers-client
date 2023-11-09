@@ -47,9 +47,11 @@ const AuthHeader = ({
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={Link} href="/leaderboard" className="mt-lg-3">
-              Leaderboard
-            </Nav.Link>
+            {user.leaderboard_access ? (
+              <Nav.Link as={Link} href="/leaderboard" className="mt-lg-3">
+                Leaderboard
+              </Nav.Link>
+            ) : null}
             <Nav.Link as={Link} href="/profile" className="mt-lg-3">
               Profile
             </Nav.Link>

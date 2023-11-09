@@ -7,7 +7,7 @@ import Alert from 'react-bootstrap/Alert';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import useAxios from '@/lib/utils/axios';
-import { updateUserDetails } from '@/lib/store/authSlice';
+import { updateMyUserDetails } from '@/lib/store/authSlice';
 
 const EditProfileForm = ({ user }: { user: User }) => {
   const api = useAxios();
@@ -38,7 +38,7 @@ const EditProfileForm = ({ user }: { user: User }) => {
       console.log('response', response);
 
       if (response.status === 200) {
-        dispatch(updateUserDetails(data));
+        dispatch(updateMyUserDetails(data));
         router.push('/profile');
       }
       return response;
