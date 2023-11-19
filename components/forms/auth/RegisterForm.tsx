@@ -49,7 +49,6 @@ const RegisterForm = () => {
         last_name: data.last_name,
         username: data.username,
         password1: data.password1,
-        // password2: data.password2,
       };
 
       // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -96,20 +95,20 @@ const RegisterForm = () => {
             {...register('last_name')}
           />
         </Form.Group>
-        <Form.Group className="mb-3" controlId="registerFormUsername">
-          <Form.Label>Username</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter username"
-            {...register('username')}
-          />
-        </Form.Group>
         <Form.Group className="mb-3" controlId="registerFormEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control
             type="email"
             placeholder="Enter email"
             {...register('email')}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="registerFormUsername">
+          <Form.Label>Username</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter username"
+            {...register('username')}
           />
         </Form.Group>
 
@@ -130,6 +129,19 @@ const RegisterForm = () => {
             {...register('password2')}
           />
         </Form.Group>
+        <Form.Group className="mb-3" controlId="registerFormReferences">
+          <Form.Label>2 References</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="test@example.com, test2@example.com"
+            {...register('references')}
+          />
+          <Form.Text className="text-muted">
+            Add two emails for supervisors or colleagues who can attest to your
+            quota attainment
+          </Form.Text>
+        </Form.Group>
+
         <Button variant="primary" type="submit">
           Submit
         </Button>
