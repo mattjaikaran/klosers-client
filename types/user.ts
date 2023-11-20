@@ -11,7 +11,8 @@ export interface RegisterFormInputs {
   password1: string;
   password2: string;
   password?: string;
-  references?: string;
+  reference1?: string;
+  reference2?: string;
 }
 
 // Data from the back end
