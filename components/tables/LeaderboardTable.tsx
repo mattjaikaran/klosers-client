@@ -32,6 +32,7 @@ import {
   rankItem,
   compareItems,
 } from '@tanstack/match-sorter-utils';
+import useAxios from '@/lib/utils/axios';
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -79,10 +80,10 @@ const columns = [
       info.getValue() ? <img src={checkmark.src} alt="checkmark" /> : '-',
     footer: (info) => info.column.id,
   }),
-  columnHelper.accessor((row) => row.year, {
-    id: 'year',
+  columnHelper.accessor((row) => row.quarter, {
+    id: 'quarter',
     cell: (info) => <i>{info.getValue()}</i>,
-    header: () => <span>Year</span>,
+    header: () => <span>Quarter</span>,
     footer: (info) => info.column.id,
   }),
   columnHelper.accessor('company', {
@@ -96,13 +97,18 @@ const columns = [
   columnHelper.accessor('market', {
     header: 'Market',
   }),
-  columnHelper.accessor('quota_attainment_percent', {
+  columnHelper.accessor('quota_attainment_percentage', {
     header: 'Quota Attainment Percent',
+    cell: (info) => `$${info.renderValue()}`,
   }),
-  columnHelper.accessor('avg_deal_size', {
+  columnHelper.accessor('quota', {
+    header: 'Quota',
+    cell: (info) => `$${info.renderValue()}`,
+  }),
+  columnHelper.accessor('average_deal_size', {
     header: 'Avg Deal Size',
   }),
-  columnHelper.accessor('avg_sales_cycle', {
+  columnHelper.accessor('average_sales_cycle', {
     header: 'Avg Sales Cycle',
   }),
   columnHelper.accessor('industry', {
@@ -111,8 +117,22 @@ const columns = [
 ];
 
 const LeaderboardTable = () => {
-  const [data, setData] = useState(() => [...defaultData]);
+  const api = useAxios();
+  const [data, setData] = useState(() => []);
   const rerender = useReducer(() => ({}), {})[1];
+
+  useEffect(() => {
+    const renderLeaderboardData = async () => {
+      try {
+        const response = await api.get('/ytd-stats');
+        console.log('response', response);
+        setData(response.data);
+      } catch (error) {
+        console.log('error', error);
+      }
+    };
+    renderLeaderboardData();
+  }, []);
 
   const [sorting, setSorting] = useState<SortingState>([]);
 

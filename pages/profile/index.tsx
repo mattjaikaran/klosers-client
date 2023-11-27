@@ -113,11 +113,11 @@ export default function MyProfile() {
             </Col>
           </Row>
           <h5>YTD Stats</h5>
-          {/* <YTDStatsTable data={user.ytdStats} /> */}
+          <YTDStatsTable data={user.ytdStats} />
           <h5>Career Stats</h5>
-          {/* <CareerStatsTable data={user.careerStats} /> */}
+          <CareerStatsTable data={user.careerStats} />
 
-          {/* <AwardsRecognition data={user.awards} /> */}
+          <AwardsRecognition data={user.awards} />
         </Container>
       </AuthLayout>
     </>
