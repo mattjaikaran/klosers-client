@@ -49,6 +49,7 @@ const RegisterForm = () => {
         last_name: data.last_name,
         username: data.username,
         password1: data.password1,
+        password2: data.password2,
       };
 
       // eslint-disable-next-line react-hooks/rules-of-hooks

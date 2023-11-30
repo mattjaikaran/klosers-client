@@ -80,6 +80,10 @@ const columns = [
       info.getValue() ? <img src={checkmark.src} alt="checkmark" /> : '-',
     footer: (info) => info.column.id,
   }),
+  columnHelper.accessor('user', {
+    header: () => 'User - Status',
+    cell: (info) => info.renderValue(),
+  }),
   columnHelper.accessor((row) => row.quarter, {
     id: 'quarter',
     cell: (info) => <i>{info.getValue()}</i>,
@@ -99,7 +103,7 @@ const columns = [
   }),
   columnHelper.accessor('quota_attainment_percentage', {
     header: 'Quota Attainment Percent',
-    cell: (info) => `$${info.renderValue()}`,
+    cell: (info) => `${info.renderValue()}%`,
   }),
   columnHelper.accessor('quota', {
     header: 'Quota',
@@ -111,6 +115,9 @@ const columns = [
   columnHelper.accessor('average_sales_cycle', {
     header: 'Avg Sales Cycle',
   }),
+  // columnHelper.accessor('status', {
+  //   header: 'Status',
+  // }),
   columnHelper.accessor('industry', {
     header: 'Industry',
   }),
@@ -124,9 +131,19 @@ const LeaderboardTable = () => {
   useEffect(() => {
     const renderLeaderboardData = async () => {
       try {
-        const response = await api.get('/ytd-stats');
-        console.log('response', response);
-        setData(response.data);
+        // let leaderboardData = []
+        // const response = await api.get('/ytd-stats/');
+        // console.log('response', response);
+        // leaderboardData = response.data;
+
+        // get leaderboard data via the ytd stats endpoint
+        // get users data from the ytd-stats.user
+        // add user status as a row via setData
+
+        const response = await api.get('/ytd-stats/');
+        const leaderboardData = response.data;
+        console.log('leaderboardData', leaderboardData);
+        setData(leaderboardData);
       } catch (error) {
         console.log('error', error);
       }

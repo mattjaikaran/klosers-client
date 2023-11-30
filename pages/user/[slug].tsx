@@ -54,9 +54,13 @@ export default function MyProfile() {
             console.log('filteredUser[0]', filteredUser[0]);
             dispatch(userDetails(filteredUser[0]));
             console.log('user.data', user.data);
-            const ytdResponse = await api.get('/ytd-stats/');
-            const careerResponse = await api.get('/career-stats/');
-            const awardResponse = await api.get('/awards-recognition-stats/');
+            const ytdResponse = await api.get('/ytd-stats/?username=demo');
+            const careerResponse = await api.get(
+              '/career-stats/?username=demo'
+            );
+            const awardResponse = await api.get(
+              '/awards-recognition-stats/?username=demo'
+            );
             console.log('ytdResponse.data', ytdResponse.data);
             console.log('careerResponse.data', careerResponse.data);
             console.log('awardResponse.data', awardResponse.data);

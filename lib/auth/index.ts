@@ -61,7 +61,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function useSignup(data: SignupFormInputs) {
   try {
-    const response = await axios.post(`${API_URL}/auth/register/`, data);
+    const response = await axios.post(`${API_URL}/register/`, data);
     console.log('response', response);
     return response;
   } catch (error: any) {
@@ -71,7 +71,7 @@ export async function useSignup(data: SignupFormInputs) {
 }
 export async function useLogin(data: LoginFormInputs): Promise<any> {
   try {
-    const response = await axios.post(`${API_URL}/auth/login/`, data);
+    const response = await axios.post(`${API_URL}/login/`, data);
     return response;
   } catch (error: any) {
     console.log('error in useLogin', error);

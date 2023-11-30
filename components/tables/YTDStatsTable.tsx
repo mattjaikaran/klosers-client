@@ -122,7 +122,7 @@ const YTDStatsTable = ({ data }: { data: YTDStatInputs[] }) => {
     }),
   ];
 
-  const [statData, setStatData] = useState(() => [...data]);
+  // const [statData, setStatData] = useState(() => [...data]);
   const rerender = useReducer(() => ({}), {})[1];
 
   const [sorting, setSorting] = useState<SortingState>([]);
