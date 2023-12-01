@@ -36,7 +36,7 @@ const LoginForm = () => {
       if (response.status === 200) {
         try {
           const userResponse = await axios.get(
-            `${API_URL}/users/${response.data?.user?.pk}/`
+            `${API_URL}/users/${response.data?.user.id}/`
           );
           const apiUser = userResponse.data;
           apiUser.token = response.data.access;

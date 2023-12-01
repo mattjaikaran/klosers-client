@@ -215,7 +215,7 @@ const CareerStatsTable = ({ data }: { data: CareerStatInputs[] }) => {
           )}
         </tbody>
       </Table>
-      {auth.user.data.username === user.data.username ? (
+      {router.pathname === '/profile' ? (
         <Button
           className="my-3 pill-btn"
           variant="outline-primary"
