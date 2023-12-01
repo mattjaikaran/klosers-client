@@ -28,7 +28,7 @@ const AwardsRecognition = ({ data }: { data: AwardRecognitionInputs[] }) => {
         <p>No Awards</p>
       )}
 
-      {auth.user.data.username === user.data.username ? (
+      {router.pathname === '/profile' ? (
         <Button
           className="mt-3 pill-btn"
           variant="outline-primary"
