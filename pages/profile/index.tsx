@@ -33,15 +33,30 @@ export default function MyProfile() {
   useEffect(() => {
     const renderMyUserData = async () => {
       try {
-        const ytdResponse = await api.get('/ytd-stats/');
-        const careerResponse = await api.get('/career-stats/');
-        const awardResponse = await api.get('/awards-recognition-stats/');
+        const ytdResponse = await api.get(`/ytd-stats`);
+        console.log('ytdResponse', ytdResponse);
+        const careerResponse = await api.get(`/career-stats/`);
+        const awardResponse = await api.get(`/awards-recognition-stats/`);
         console.log('ytdResponse.data', ytdResponse.data);
         console.log('careerResponse.data', careerResponse.data);
         console.log('awardResponse.data', awardResponse.data);
-        dispatch(getMyUserCareerStats(careerResponse.data));
-        dispatch(getMyUserYTDStats(ytdResponse.data));
-        dispatch(getMyUserAwards(awardResponse.data));
+        dispatch(
+          getMyUserCareerStats(
+            careerResponse.data.filter(
+              (item: any) => item.user === user.data.id
+            )
+          )
+        );
+        dispatch(
+          getMyUserYTDStats(
+            ytdResponse.data.filter((item: any) => item.user === user.data.id)
+          )
+        );
+        dispatch(
+          getMyUserAwards(
+            awardResponse.data.filter((item: any) => item.user === user.data.id)
+          )
+        );
       } catch (error) {
         console.error('error', error);
       }

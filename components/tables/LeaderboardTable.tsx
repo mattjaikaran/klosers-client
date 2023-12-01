@@ -71,6 +71,11 @@ const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
   return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir;
 };
 
+// const userStatusMapping = data.reduce((acc, user) => {
+//   acc[user.id] = user.status;
+//   return acc;
+// }, {});
+
 const columnHelper = createColumnHelper<LeaderboardStat>();
 const columns = [
   columnHelper.accessor('quota_verified', {
@@ -82,7 +87,8 @@ const columns = [
   }),
   columnHelper.accessor('user', {
     header: () => 'User - Status',
-    cell: (info) => info.renderValue(),
+    cell: (info) => info.getValue(),
+    // cell: (info) => userStatusMapping[info.getValue()],
   }),
   columnHelper.accessor((row) => row.quarter, {
     id: 'quarter',
@@ -140,7 +146,7 @@ const LeaderboardTable = () => {
         // get users data from the ytd-stats.user
         // add user status as a row via setData
 
-        const response = await api.get('/ytd-stats/');
+        const response = await api.get('/leaderboard/');
         const leaderboardData = response.data;
         console.log('leaderboardData', leaderboardData);
         setData(leaderboardData);
