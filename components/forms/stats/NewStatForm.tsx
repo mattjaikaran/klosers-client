@@ -29,14 +29,27 @@ const schema = yup
       .max(4)
       .positive()
       .integer(),
-    company: yup.string().required(),
-    title: yup.string().required(),
-    market: yup.string().required(),
-    quota: yup.number().positive().integer(),
-    quota_attainment_percentage: yup.number().max(999).positive().integer(),
-    average_deal_size: yup.number().positive().integer(),
-    average_sales_cycle: yup.number().positive().integer(),
-    industry: yup.string().required(),
+    company: yup.string().required('Company is required'),
+    title: yup.string().required('Title is required'),
+    market: yup.string().required('Market is required'),
+    quota: yup.number().positive().integer().required('Quota is required'),
+    quota_attainment_percentage: yup
+      .number()
+      .max(999)
+      .positive()
+      .integer()
+      .required('Quota Attainment is required'),
+    average_deal_size: yup
+      .number()
+      .positive()
+      .integer()
+      .required('Average Deal Size is required'),
+    average_sales_cycle: yup
+      .number()
+      .positive()
+      .integer()
+      .required('Average Sales Cycle is required'),
+    industry: yup.string().required().required('Industry is required'),
   })
   .required();
 
@@ -48,6 +61,7 @@ const NewStatForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<Stat>({
+    // @ts-ignore
     resolver: yupResolver(schema),
   });
   const api = useAxios();
@@ -142,6 +156,7 @@ const NewStatForm = () => {
             type="number"
             placeholder="Enter Quota"
             {...register('quota')}
+            required
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="formStatPercentQuotaAttainment">
@@ -150,6 +165,7 @@ const NewStatForm = () => {
             type="number"
             placeholder="Enter % Quota Attainment"
             {...register('quota_attainment_percentage')}
+            required
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="formStatAverageDealSize">
@@ -158,6 +174,7 @@ const NewStatForm = () => {
             type="number"
             placeholder="Select Average Deal Size"
             {...register('average_deal_size')}
+            required
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="formStatAverageSalesCycle">

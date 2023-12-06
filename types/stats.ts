@@ -57,7 +57,7 @@ export interface Stat {
 
 export interface LeaderboardStat {
   id?: string;
-  quota_verified: boolean;
+  quota_verified?: boolean;
   year: number;
   quarter: 1 | 2 | 3 | 4;
   company: string;
