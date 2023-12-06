@@ -2,7 +2,6 @@ import useAxios from '@/lib/utils/axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from '@/lib/store/redux';
 import { useRouter } from 'next/router';
-import { getMyUserYTDStats } from '@/lib/store/authSlice';
 
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -47,8 +46,7 @@ const NewYTDStatForm = ({ closeModal }: { closeModal?: any }) => {
       console.log('response', response);
       if (response.status === 201) {
         const ytdResponse = await api.get('/ytd-stats/');
-        dispatch(getMyUserYTDStats(ytdResponse.data));
-
+        console.log('ytdResponse', ytdResponse);
         if (ytdResponse.status === 200) router.push('/profile');
       }
       return response;
