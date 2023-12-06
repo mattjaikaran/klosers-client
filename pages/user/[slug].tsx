@@ -1,8 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Head from 'next/head';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import useAxios from '@/lib/utils/axios';
+import { useAppDispatch, useAppSelector } from '@/lib/store/redux';
+import {
+  userDetails,
+  getUserStats,
+  getUserAwards,
+} from '@/lib/store/userSlice';
+
 import AuthLayout from '@/layouts/AuthLayout';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -10,22 +16,11 @@ import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
+
 import AwardsRecognition from '@/components/AwardsRecognition';
-import CareerStatsTable from '@/components/tables/CareerStatsTable';
-import YTDStatsTable from '@/components/tables/StatsTable';
+import StatsTable from '@/components/tables/StatsTable';
 import avatar from '@/assets/images/avatar-placeholder.png';
-import { useAppDispatch, useAppSelector } from '@/lib/store/redux';
-import {
-  userDetails,
-  getUserCareerStats,
-  getUserYTDStats,
-  getUserAwards,
-} from '@/lib/store/userSlice';
-import {
-  AwardRecognitionInputs,
-  CareerStatInputs,
-  YTDStatInputs,
-} from '@/types/stats';
+import { AwardRecognitionInputs, Stat } from '@/types/stats';
 
 export default function MyProfile() {
   const api = useAxios();
@@ -54,27 +49,17 @@ export default function MyProfile() {
             console.log('filteredUser[0]', filteredUser[0]);
             dispatch(userDetails(filteredUser[0]));
             console.log('user.data', user.data);
-            const ytdResponse = await api.get('/ytd-stats/?username=demo');
-            const careerResponse = await api.get(
-              '/career-stats/?username=demo'
+            const statsResponse = await api.get(
+              `/stats/?username=${router.query.slug}`
             );
             const awardResponse = await api.get(
-              '/awards-recognition-stats/?username=demo'
+              `/awards-recognition-stats/?username=${router.query.slug}`
             );
-            console.log('ytdResponse.data', ytdResponse.data);
-            console.log('careerResponse.data', careerResponse.data);
-            console.log('awardResponse.data', awardResponse.data);
+            console.log('statsResponse.data', statsResponse.data);
             dispatch(
-              getUserCareerStats(
-                careerResponse.data.filter(
-                  (stat: CareerStatInputs) => stat.user === user.data.id
-                )
-              )
-            );
-            dispatch(
-              getUserYTDStats(
-                ytdResponse.data.filter(
-                  (stat: YTDStatInputs) => stat.user === user.data.id
+              getUserStats(
+                statsResponse.data.filter(
+                  (stat: Stat) => stat.user === user.data.id
                 )
               )
             );
@@ -164,11 +149,8 @@ export default function MyProfile() {
             </Row>
           )}
 
-          <h5>YTD Stats</h5>
-          <YTDStatsTable data={user.ytdStats} />
-          <h5>Career Stats</h5>
-          <CareerStatsTable data={user.careerStats} />
-
+          <h5>Stats</h5>
+          <StatsTable data={user.stats} />
           <AwardsRecognition data={user.awards} />
         </Container>
       </AuthLayout>
