@@ -19,13 +19,14 @@ const EditYTDStat = () => {
       </Head>
       <AuthLayout>
         <Container>
-          <EditYTDStatForm
+          <p>edit ytd stat wip</p>
+          {/* <EditYTDStatForm
             item={
               user.ytdStats.filter(
                 (stat: any) => stat.id === router.query.id
               )[0]
             }
-          />
+          /> */}
         </Container>
       </AuthLayout>
     </div>
