@@ -4,7 +4,7 @@ import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import { useRouter } from 'next/router';
 import checkmark from '@/assets/icons/checkmark.svg';
-import { YTDStatInputs } from '@/types/stats';
+import { Stat } from '@/types/stats';
 import {
   createColumnHelper,
   SortingState,
@@ -65,12 +65,12 @@ const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
   return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir;
 };
 
-const YTDStatsTable = ({ data }: { data: YTDStatInputs[] }) => {
+const StatsTable = ({ data }: { data: Stat[] }) => {
   const router = useRouter();
   const auth: any = useAppSelector((state) => state.auth);
   const { user }: any = useAppSelector((state) => state.user);
 
-  const columnHelper = createColumnHelper<YTDStatInputs>();
+  const columnHelper = createColumnHelper<Stat>();
   const columns = [
     columnHelper.accessor('quota_verified', {
       header: () => <span>Quota Verified</span>,
@@ -83,6 +83,12 @@ const YTDStatsTable = ({ data }: { data: YTDStatInputs[] }) => {
       id: 'quarter',
       cell: (info) => <i>{info.getValue()}</i>,
       header: () => <span>Quarter</span>,
+      footer: (info) => info.column.id,
+    }),
+    columnHelper.accessor((row) => row.year, {
+      id: 'year',
+      cell: (info) => <i>{info.getValue()}</i>,
+      header: () => <span>Year</span>,
       footer: (info) => info.column.id,
     }),
     columnHelper.accessor('company', {
@@ -114,7 +120,7 @@ const YTDStatsTable = ({ data }: { data: YTDStatInputs[] }) => {
         <Button
           variant="link"
           className="text-muted"
-          onClick={() => router.push(`/ytd-stats/edit/${info.getValue()}`)}
+          onClick={() => router.push(`/stats/edit/${info.getValue()}`)}
         >
           Edit
         </Button>
@@ -209,7 +215,7 @@ const YTDStatsTable = ({ data }: { data: YTDStatInputs[] }) => {
             })
           ) : (
             <tr>
-              <td colSpan={12}>No Year To Date Stats</td>
+              <td colSpan={12}>No Stats</td>
             </tr>
           )}
         </tbody>
@@ -218,12 +224,12 @@ const YTDStatsTable = ({ data }: { data: YTDStatInputs[] }) => {
         <Button
           className="my-3 pill-btn"
           variant="outline-primary"
-          onClick={() => router.push('/ytd-stats/new')}
+          onClick={() => router.push('/stats/new')}
         >
-          Add YTD Stat
+          Add New Stat
         </Button>
       ) : null}
     </>
   );
 };
-export default YTDStatsTable;
+export default StatsTable;

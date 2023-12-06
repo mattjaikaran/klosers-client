@@ -12,7 +12,7 @@ import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import AwardsRecognition from '@/components/AwardsRecognition';
 import CareerStatsTable from '@/components/tables/CareerStatsTable';
-import YTDStatsTable from '@/components/tables/YTDStatsTable';
+import YTDStatsTable from '@/components/tables/StatsTable';
 import avatar from '@/assets/images/avatar-placeholder.png';
 import { useAppDispatch, useAppSelector } from '@/lib/store/redux';
 import {

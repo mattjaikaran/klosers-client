@@ -13,7 +13,7 @@ import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
 
-import YTDStatsTable from '@/components/tables/YTDStatsTable';
+import StatsTable from '@/components/tables/StatsTable';
 import CareerStatsTable from '@/components/tables/CareerStatsTable';
 import AwardsRecognition from '@/components/AwardsRecognition';
 
@@ -33,30 +33,34 @@ export default function MyProfile() {
   useEffect(() => {
     const renderMyUserData = async () => {
       try {
-        const ytdResponse = await api.get(`/ytd-stats`);
-        console.log('ytdResponse', ytdResponse);
-        const careerResponse = await api.get(`/career-stats/`);
-        const awardResponse = await api.get(`/awards-recognition-stats/`);
-        console.log('ytdResponse.data', ytdResponse.data);
-        console.log('careerResponse.data', careerResponse.data);
-        console.log('awardResponse.data', awardResponse.data);
-        dispatch(
-          getMyUserCareerStats(
-            careerResponse.data.filter(
-              (item: any) => item.user === user.data.id
-            )
-          )
-        );
-        dispatch(
-          getMyUserYTDStats(
-            ytdResponse.data.filter((item: any) => item.user === user.data.id)
-          )
-        );
-        dispatch(
-          getMyUserAwards(
-            awardResponse.data.filter((item: any) => item.user === user.data.id)
-          )
-        );
+        // const ytdResponse = await api.get(`/stats`);
+        // console.log('ytdResponse', ytdResponse);
+        // const careerResponse = await api.get(`/career-stats/`);
+        // const awardResponse = await api.get(`/awards-recognition-stats/`);
+        // console.log('ytdResponse.data', ytdResponse.data);
+        // console.log('careerResponse.data', careerResponse.data);
+        // console.log('awardResponse.data', awardResponse.data);
+
+        const statResponse = await api.get(`/stats/`);
+        console.log('statResponse', statResponse);
+
+        // dispatch(
+        //   getMyUserCareerStats(
+        //     careerResponse.data.filter(
+        //       (item: any) => item.user === user.data.id
+        //     )
+        //   )
+        // );
+        // dispatch(
+        //   getMyUserYTDStats(
+        //     ytdResponse.data.filter((item: any) => item.user === user.data.id)
+        //   )
+        // );
+        // dispatch(
+        //   getMyUserAwards(
+        //     awardResponse.data.filter((item: any) => item.user === user.data.id)
+        //   )
+        // );
       } catch (error) {
         console.error('error', error);
       }
@@ -127,11 +131,8 @@ export default function MyProfile() {
               <p>{user.data.about}</p>
             </Col>
           </Row>
-          <h5>YTD Stats</h5>
-          <YTDStatsTable data={user.ytdStats} />
-          <h5>Career Stats</h5>
-          <CareerStatsTable data={user.careerStats} />
-
+          <h5>Stats</h5>
+          <StatsTable data={user.ytdStats} />
           <AwardsRecognition data={user.awards} />
         </Container>
       </AuthLayout>
