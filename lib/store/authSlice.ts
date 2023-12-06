@@ -4,8 +4,7 @@ const AUTH = 'auth';
 const initialState = {
   user: {
     data: {},
-    careerStats: [],
-    ytdStats: [],
+    stats: [],
     awards: [],
   },
   isLoggedIn: false,
@@ -29,16 +28,10 @@ export const authSlice = createSlice({
         data: action.payload,
       };
     },
-    getMyUserCareerStats: (state, action) => {
+    getMyUserStats: (state, action) => {
       state.user = {
         ...state.user,
-        careerStats: action.payload,
-      };
-    },
-    getMyUserYTDStats: (state, action) => {
-      state.user = {
-        ...state.user,
-        ytdStats: action.payload,
+        stats: action.payload,
       };
     },
     getMyUserAwards: (state, action) => {
@@ -52,8 +45,7 @@ export const authSlice = createSlice({
       console.log('action.payload in userLogout', action.payload);
       state.user = {
         data: {},
-        careerStats: [],
-        ytdStats: [],
+        stats: [],
         awards: [],
       };
       state.isLoggedIn = false;
@@ -64,8 +56,7 @@ export const authSlice = createSlice({
 export const {
   userLogin,
   updateMyUserDetails,
-  getMyUserCareerStats,
-  getMyUserYTDStats,
+  getMyUserStats,
   getMyUserAwards,
   userLogout,
 } = authSlice.actions;

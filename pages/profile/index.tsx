@@ -14,15 +14,10 @@ import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
 
 import StatsTable from '@/components/tables/StatsTable';
-import CareerStatsTable from '@/components/tables/CareerStatsTable';
 import AwardsRecognition from '@/components/AwardsRecognition';
 
 import avatar from '@/assets/images/avatar-placeholder.png';
-import {
-  getMyUserCareerStats,
-  getMyUserYTDStats,
-  getMyUserAwards,
-} from '@/lib/store/authSlice';
+import { getMyUserStats, getMyUserAwards } from '@/lib/store/authSlice';
 
 export default function MyProfile() {
   const api = useAxios();
@@ -33,34 +28,13 @@ export default function MyProfile() {
   useEffect(() => {
     const renderMyUserData = async () => {
       try {
-        // const ytdResponse = await api.get(`/stats`);
-        // console.log('ytdResponse', ytdResponse);
-        // const careerResponse = await api.get(`/career-stats/`);
-        // const awardResponse = await api.get(`/awards-recognition-stats/`);
-        // console.log('ytdResponse.data', ytdResponse.data);
-        // console.log('careerResponse.data', careerResponse.data);
-        // console.log('awardResponse.data', awardResponse.data);
-
-        const statResponse = await api.get(`/stats/`);
-        console.log('statResponse', statResponse);
-
-        // dispatch(
-        //   getMyUserCareerStats(
-        //     careerResponse.data.filter(
-        //       (item: any) => item.user === user.data.id
-        //     )
-        //   )
-        // );
-        // dispatch(
-        //   getMyUserYTDStats(
-        //     ytdResponse.data.filter((item: any) => item.user === user.data.id)
-        //   )
-        // );
-        // dispatch(
-        //   getMyUserAwards(
-        //     awardResponse.data.filter((item: any) => item.user === user.data.id)
-        //   )
-        // );
+        const response = await api.get(`/stats/`);
+        console.log('response', response);
+        dispatch(
+          getMyUserStats(
+            response.data.filter((item: any) => item.user === user.data.id)
+          )
+        );
       } catch (error) {
         console.error('error', error);
       }
@@ -132,7 +106,7 @@ export default function MyProfile() {
             </Col>
           </Row>
           <h5>Stats</h5>
-          <StatsTable data={user.ytdStats} />
+          <StatsTable data={user.stats} />
           <AwardsRecognition data={user.awards} />
         </Container>
       </AuthLayout>

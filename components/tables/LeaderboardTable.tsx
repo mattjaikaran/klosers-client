@@ -24,7 +24,6 @@ import {
 } from '@tanstack/react-table';
 import checkmark from '@/assets/icons/checkmark.svg';
 import filter from '@/assets/icons/filter.svg';
-import defaultData from '@/data/stats.json';
 import { LeaderboardStat } from '@/types/stats';
 
 import {
@@ -85,10 +84,15 @@ const columns = [
       info.getValue() ? <img src={checkmark.src} alt="checkmark" /> : '-',
     footer: (info) => info.column.id,
   }),
-  columnHelper.accessor('user', {
-    header: () => 'User - Status',
+  columnHelper.accessor('user_data.user_status', {
+    header: () => `Users Status`,
     cell: (info) => info.getValue(),
-    // cell: (info) => userStatusMapping[info.getValue()],
+  }),
+  columnHelper.accessor((row) => row.year, {
+    id: 'year',
+    cell: (info) => <i>{info.getValue()}</i>,
+    header: () => <span>Year</span>,
+    footer: (info) => info.column.id,
   }),
   columnHelper.accessor((row) => row.quarter, {
     id: 'quarter',

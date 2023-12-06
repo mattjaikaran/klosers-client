@@ -4,8 +4,7 @@ const USER = 'user';
 const initialState = {
   user: {
     data: {},
-    careerStats: [],
-    ytdStats: [],
+    stats: [],
     awards: [],
   },
 };
@@ -21,16 +20,10 @@ export const userSlice = createSlice({
         data: action.payload,
       };
     },
-    getUserCareerStats: (state, action) => {
+    getUserStats: (state, action) => {
       state.user = {
         ...state.user,
-        careerStats: action.payload,
-      };
-    },
-    getUserYTDStats: (state, action) => {
-      state.user = {
-        ...state.user,
-        ytdStats: action.payload,
+        stats: action.payload,
       };
     },
     getUserAwards: (state, action) => {
@@ -42,12 +35,7 @@ export const userSlice = createSlice({
   },
 });
 
-export const {
-  userDetails,
-  getUserCareerStats,
-  getUserYTDStats,
-  getUserAwards,
-} = userSlice.actions;
+export const { userDetails, getUserStats, getUserAwards } = userSlice.actions;
 
 export const selectUser = (state: typeof initialState) => state.user;
 
