@@ -23,10 +23,7 @@ const EditAwardRecognitionForm = ({
   const onSubmit: SubmitHandler<AwardRecognitionInputs> = async (data) => {
     try {
       console.log(data);
-      const response = await api.patch(
-        `/awards-recognition-stats/${item.id}/`,
-        data
-      );
+      const response = await api.patch(`/awards/${item.id}/`, data);
       console.log('response', response);
       if (response.status === 200) {
         router.push('/profile');

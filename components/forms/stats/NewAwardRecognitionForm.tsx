@@ -27,10 +27,7 @@ const NewAwardRecognitionForm = () => {
         text: data.text,
       };
       console.log('newAwardStat', newAwardStat);
-      const response = await api.post(
-        '/awards-recognition-stats/',
-        newAwardStat
-      );
+      const response = await api.post('/awards/', newAwardStat);
       console.log('response', response);
       if (response.status === 201) {
         router.push('/profile');
@@ -44,7 +41,11 @@ const NewAwardRecognitionForm = () => {
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Form.Group className="mb-3" controlId="formAwardStatType">
         <Form.Label>Type</Form.Label>
-        <Form.Control type="text" placeholder="Q3" {...register('type')} />
+        <Form.Control
+          type="text"
+          placeholder="Enter Award Type"
+          {...register('type')}
+        />
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formAwardStatText">

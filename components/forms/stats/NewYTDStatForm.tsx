@@ -15,7 +15,7 @@ import {
 } from './constants';
 import { YTDStatInputs } from '@/types/stats';
 
-const NewYTDStatForm = ({ closeModal }: { closeModal?: any }) => {
+const NewYTDStatForm = () => {
   const {
     register,
     handleSubmit,

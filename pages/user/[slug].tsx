@@ -18,7 +18,7 @@ import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 
 import AwardsRecognition from '@/components/AwardsRecognition';
-import StatsTable from '@/components/tables/StatsTable';
+import UserProfileStatsTable from '@/components/tables/UserProfileStatsTable';
 import avatar from '@/assets/images/avatar-placeholder.png';
 import { AwardRecognitionInputs, Stat } from '@/types/stats';
 
@@ -36,43 +36,52 @@ export default function MyProfile() {
   useEffect(() => {
     const renderUserData = async () => {
       try {
-        const response = await api.get(`/users/?username=${router.query.slug}`);
-        console.log('response', response);
-        console.log('response.data', response.data);
-        if (response.status === 200) {
-          const filteredUser = response.data.filter((results: any) => {
+        const userResponse = await api.get(`/users/`);
+        console.log('userResponse', userResponse);
+        console.log('userResponse.data', userResponse.data);
+        if (userResponse.status === 200) {
+          const filteredUser = userResponse.data.filter((results: any) => {
             return results.username === username;
           });
           if (filteredUser[0]) {
             console.log('userData.id', user.data.id);
-            filteredUser[0].password = '';
             console.log('filteredUser[0]', filteredUser[0]);
+            // add user data to redux store
             dispatch(userDetails(filteredUser[0]));
             console.log('user.data', user.data);
-            const statsResponse = await api.get(
-              `/stats/?username=${router.query.slug}`
-            );
-            const awardResponse = await api.get(
-              `/awards-recognition-stats/?username=${router.query.slug}`
-            );
+            const statsResponse = await api.get(`/stats/`);
+            const awardResponse = await api.get(`/awards/`);
             console.log('statsResponse.data', statsResponse.data);
+            console.log('awardResponse.data', awardResponse.data);
+            console.log(
+              'awardResponse.data.filter',
+              awardResponse.data.filter(
+                (stat: AwardRecognitionInputs) => stat.user === username
+              )
+            );
             dispatch(
               getUserStats(
-                statsResponse.data.filter(
-                  (stat: Stat) => stat.user === user.data.id
-                )
+                statsResponse.data.filter((stat: Stat) => {
+                  console.log('stat', stat);
+                  console.log('stat.user_data', stat.user_data);
+                  console.log(
+                    'stat.user_data.username',
+                    stat.user_data.username
+                  );
+                  return stat.user_data.username === username;
+                })
               )
             );
             dispatch(
               getUserAwards(
                 awardResponse.data.filter(
-                  (stat: AwardRecognitionInputs) => stat.user === user.data.id
+                  (stat: AwardRecognitionInputs) => stat.user === username
                 )
               )
             );
           }
         }
-        return response;
+        return userResponse;
       } catch (error: any) {
         console.log('error', error);
         if (error.response) {
@@ -138,19 +147,38 @@ export default function MyProfile() {
                   </a>
                 </p>
                 <Button className="pill-btn">Share Profile</Button>
-                <Button variant="outline-primary" className="pill-btn mx-2">
+                <Button
+                  variant="outline-primary"
+                  className="pill-btn mx-2"
+                  disabled
+                >
                   Message
                 </Button>
               </Col>
               <Col md={6}>
                 <h4>About</h4>
                 <p>{user.data.about}</p>
+
+                {/* references */}
+                <h5>References</h5>
+                {user.data.references.map((reference: any) => (
+                  <p key={reference.id}>
+                    <strong>
+                      {reference.first_name} {reference.last_name}
+                    </strong>
+                    {reference.company}
+                    <br />
+                    {reference.email}
+                    <br />
+                    {reference.phone}
+                  </p>
+                ))}
               </Col>
             </Row>
           )}
 
           <h5>Stats</h5>
-          <StatsTable data={user.stats} />
+          <UserProfileStatsTable data={user.stats} />
           <AwardsRecognition data={user.awards} />
         </Container>
       </AuthLayout>

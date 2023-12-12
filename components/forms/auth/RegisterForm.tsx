@@ -130,26 +130,6 @@ const RegisterForm = () => {
             {...register('password2')}
           />
         </Form.Group>
-        <Form.Group className="mb-3" controlId="registerFormReference1">
-          <Form.Label>Reference 1</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="test@example.com"
-            {...register('reference1')}
-          />
-          <Form.Text className="text-muted">
-            Add two emails for supervisors or colleagues who can attest to your
-            quota attainment
-          </Form.Text>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="registerFormReference2">
-          <Form.Label>Reference 2</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="test2@example.com"
-            {...register('reference2')}
-          />
-        </Form.Group>
 
         <Button variant="primary" type="submit">
           Submit

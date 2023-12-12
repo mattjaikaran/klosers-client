@@ -1,34 +1,34 @@
 /* eslint-disable @next/next/no-img-element */
+import { useState, useReducer } from 'react';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
-import checkmark from '@/assets/icons/checkmark.svg';
 import { useRouter } from 'next/router';
-import { CareerStatInputs } from '@/types/stats';
+import checkmark from '@/assets/icons/checkmark.svg';
+import { Stat } from '@/types/stats';
 import {
+  createColumnHelper,
+  SortingState,
+  useReactTable,
+  getCoreRowModel,
+  getSortedRowModel,
+  flexRender,
   ColumnFiltersState,
   FilterFn,
   SortingFn,
-  SortingState,
-  Updater,
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
   getFacetedMinMaxValues,
   getFacetedRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
-  getSortedRowModel,
   sortingFns,
-  useReactTable,
 } from '@tanstack/react-table';
-import { useState, useReducer } from 'react';
 import {
   RankingInfo,
   rankItem,
   compareItems,
 } from '@tanstack/match-sorter-utils';
-import { useAppSelector } from '@/lib/store/redux';
+import { useAppDispatch, useAppSelector } from '@/lib/store/redux';
+import { industryChoices } from '../forms/stats/constants';
 declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>;
@@ -66,12 +66,12 @@ const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
   return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir;
 };
 
-const CareerStatsTable = ({ data }: { data: CareerStatInputs[] }) => {
+const UserProfileStatsTable = ({ data }: { data: Stat[] }) => {
   const router = useRouter();
   const auth: any = useAppSelector((state) => state.auth);
   const { user }: any = useAppSelector((state) => state.user);
 
-  const columnHelper = createColumnHelper<CareerStatInputs>();
+  const columnHelper = createColumnHelper<Stat>();
   const columns = [
     columnHelper.accessor('quota_verified', {
       header: () => <span>Quota Verified</span>,
@@ -80,9 +80,15 @@ const CareerStatsTable = ({ data }: { data: CareerStatInputs[] }) => {
         info.getValue() ? <img src={checkmark.src} alt="checkmark" /> : '-',
       footer: (info) => info.column.id,
     }),
+    columnHelper.accessor((row) => row.quarter, {
+      id: 'quarter',
+      cell: (info) => info.getValue(),
+      header: () => <span>Quarter</span>,
+      footer: (info) => info.column.id,
+    }),
     columnHelper.accessor((row) => row.year, {
       id: 'year',
-      cell: (info) => <i>{info.getValue()}</i>,
+      cell: (info) => info.getValue(),
       header: () => <span>Year</span>,
       footer: (info) => info.column.id,
     }),
@@ -99,31 +105,36 @@ const CareerStatsTable = ({ data }: { data: CareerStatInputs[] }) => {
     }),
     columnHelper.accessor('quota_attainment_percentage', {
       header: 'Quota Attainment Percent',
+      // round up to nearest whole number
+      cell: (info: any) =>
+        `${Math.round(info.getValue()).toLocaleString('en-US')}%`,
+    }),
+    columnHelper.accessor('quota', {
+      header: 'Quota',
+      cell: (info: any) => `$${info.renderValue().toLocaleString('en-US')}`,
     }),
     columnHelper.accessor('average_deal_size', {
       header: 'Avg Deal Size',
+      cell: (info: any) =>
+        `$${Math.ceil(info.getValue()).toLocaleString('en-US')}`,
     }),
     columnHelper.accessor('average_sales_cycle', {
       header: 'Avg Sales Cycle',
+      cell: (info: any) => Math.ceil(info.getValue()).toLocaleString('en-US'),
     }),
     columnHelper.accessor('industry', {
       header: 'Industry',
-    }),
-    columnHelper.accessor('id', {
-      header: () => <span>Actions</span>,
-      cell: (info) => (
-        <Button
-          variant="link"
-          className="text-muted"
-          onClick={() => router.push(`/career-stats/edit/${info.getValue()}`)}
-        >
-          Edit
-        </Button>
-      ),
+      cell: (info) => {
+        // filters through industryChoices and returns the label that matches the value
+        // Telecommunications vs TELECOMMUNICATIONS
+        return industryChoices.filter(
+          (item) => item.value === info.getValue()
+        )[0].label;
+      },
     }),
   ];
 
-  const [statData, setStatData] = useState(() => [...data]);
+  // const [statData, setStatData] = useState(() => [...data]);
   const rerender = useReducer(() => ({}), {})[1];
 
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -210,21 +221,12 @@ const CareerStatsTable = ({ data }: { data: CareerStatInputs[] }) => {
             })
           ) : (
             <tr>
-              <td colSpan={12}>No Career Stats</td>
+              <td colSpan={12}>No Stats</td>
             </tr>
           )}
         </tbody>
       </Table>
-      {router.pathname === '/profile' ? (
-        <Button
-          className="my-3 pill-btn"
-          variant="outline-primary"
-          onClick={() => router.push(`/career-stats/new`)}
-        >
-          Add Career Stat
-        </Button>
-      ) : null}
     </>
   );
 };
-export default CareerStatsTable;
+export default UserProfileStatsTable;

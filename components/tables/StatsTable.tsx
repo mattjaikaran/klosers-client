@@ -28,6 +28,7 @@ import {
   compareItems,
 } from '@tanstack/match-sorter-utils';
 import { useAppDispatch, useAppSelector } from '@/lib/store/redux';
+import { industryChoices } from '../forms/stats/constants';
 declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>;
@@ -81,13 +82,13 @@ const StatsTable = ({ data }: { data: Stat[] }) => {
     }),
     columnHelper.accessor((row) => row.quarter, {
       id: 'quarter',
-      cell: (info) => <i>{info.getValue()}</i>,
+      cell: (info) => info.getValue(),
       header: () => <span>Quarter</span>,
       footer: (info) => info.column.id,
     }),
     columnHelper.accessor((row) => row.year, {
       id: 'year',
-      cell: (info) => <i>{info.getValue()}</i>,
+      cell: (info) => info.getValue(),
       header: () => <span>Year</span>,
       footer: (info) => info.column.id,
     }),
@@ -104,15 +105,32 @@ const StatsTable = ({ data }: { data: Stat[] }) => {
     }),
     columnHelper.accessor('quota_attainment_percentage', {
       header: 'Quota Attainment Percent',
+      // round up to nearest whole number
+      cell: (info: any) =>
+        `${Math.round(info.getValue()).toLocaleString('en-US')}%`,
+    }),
+    columnHelper.accessor('quota', {
+      header: 'Quota',
+      cell: (info: any) => `$${info.renderValue().toLocaleString('en-US')}`,
     }),
     columnHelper.accessor('average_deal_size', {
       header: 'Avg Deal Size',
+      cell: (info: any) =>
+        `$${Math.ceil(info.getValue()).toLocaleString('en-US')}`,
     }),
     columnHelper.accessor('average_sales_cycle', {
       header: 'Avg Sales Cycle',
+      cell: (info: any) => Math.ceil(info.getValue()).toLocaleString('en-US'),
     }),
     columnHelper.accessor('industry', {
       header: 'Industry',
+      cell: (info) => {
+        // filters through industryChoices and returns the label that matches the value
+        // Telecommunications vs TELECOMMUNICATIONS
+        return industryChoices.filter(
+          (item) => item.value === info.getValue()
+        )[0].label;
+      },
     }),
     columnHelper.accessor('id', {
       header: () => <span>Actions</span>,

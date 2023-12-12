@@ -18,6 +18,7 @@ import AwardsRecognition from '@/components/AwardsRecognition';
 
 import avatar from '@/assets/images/avatar-placeholder.png';
 import { getMyUserStats, getMyUserAwards } from '@/lib/store/authSlice';
+import { Reference } from '@/types/user';
 
 export default function MyProfile() {
   const api = useAxios();
@@ -42,6 +43,24 @@ export default function MyProfile() {
     renderMyUserData();
   }, []);
 
+  // get user awards
+  useEffect(() => {
+    const renderMyUserAwards = async () => {
+      try {
+        const response = await api.get(`/awards/`);
+        console.log('response', response);
+        dispatch(
+          getMyUserAwards(
+            response.data.filter((item: any) => item.user === user.data.id)
+          )
+        );
+      } catch (error) {
+        console.error('error', error);
+      }
+    };
+    renderMyUserAwards();
+  }, []);
+
   return (
     <>
       <Head>
@@ -62,7 +81,9 @@ export default function MyProfile() {
                     roundedCircle
                   />
                   <p className="mt-5">
-                    <Link href="/profile/edit">Edit Profile</Link>
+                    <Link href="/profile/edit" className="text-muted">
+                      Edit Profile
+                    </Link>
                   </p>
                 </Col>
                 <Col>
@@ -93,16 +114,52 @@ export default function MyProfile() {
                       LinkedIn
                     </a>
                   </p>
-                  <Button className="pill-btn">Share Profile</Button>
-                  <Button variant="outline-primary" className="pill-btn mx-2">
-                    Message
-                  </Button>
                 </Col>
               </Row>
             </Col>
             <Col md={6}>
               <h4>About</h4>
               <p>{user.data.about}</p>
+
+              {/* References */}
+              <h5>References</h5>
+              {user.data.references.length > 0
+                ? user.data.references.map((item: Reference, index: number) => (
+                    <div key={index}>
+                      <p>
+                        <strong>Name: </strong>
+                        <span>
+                          {item.first_name} {item.last_name}
+                        </span>
+                      </p>
+                      <p>
+                        <strong>Email: </strong>
+                        <span>{item.email}</span>
+                      </p>
+                      <p>
+                        <strong>Phone: </strong>
+                        <span>{item.phone}</span>
+                      </p>
+                      {/* edit button */}
+                      <p>
+                        <Link
+                          href={`/references/edit/${item.id}`}
+                          className="text-muted"
+                        >
+                          Edit
+                        </Link>
+                      </p>
+                    </div>
+                  ))
+                : null}
+              {/* Button to add a new reference */}
+              <Button
+                variant="primary"
+                className="pill-btn"
+                onClick={() => router.push('/references/new')}
+              >
+                Add Reference
+              </Button>
             </Col>
           </Row>
           <h5>Stats</h5>

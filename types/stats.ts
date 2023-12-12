@@ -40,19 +40,20 @@ export interface AwardRecognitionInputs {
 // new Stat => refactored from YTD and Career stats to one stat
 export interface Stat {
   id?: string;
-  quota_verified?: boolean;
+  quota_verified: boolean;
   year: number;
   // quarter only allows 1-4
   quarter: 1 | 2 | 3 | 4;
   company: string;
   title: string;
   market: string;
-  quota?: number;
-  quota_attainment_percentage?: number;
-  average_deal_size?: number;
-  average_sales_cycle?: number;
-  industry?: string;
+  quota: number;
+  quota_attainment_percentage: number;
+  average_deal_size: number;
+  average_sales_cycle: number;
+  industry: string;
   user?: string;
+  user_data?: any;
 }
 
 export interface LeaderboardStat {

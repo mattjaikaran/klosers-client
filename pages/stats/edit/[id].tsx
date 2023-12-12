@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useAppSelector } from '@/lib/store/redux';
 import AuthLayout from '@/layouts/AuthLayout';
 import Container from 'react-bootstrap/Container';
+import EditStatForm from '@/components/forms/stats/EditStatForm';
 
 const EditStatPage = ({ id }: { id?: string }) => {
   const router = useRouter();
@@ -19,13 +20,11 @@ const EditStatPage = ({ id }: { id?: string }) => {
       <AuthLayout>
         <Container>
           <p>edit stat page wip</p>
-          {/* <EditStatForm
+          <EditStatForm
             item={
-              user.stats.filter(
-                (stat: any) => stat.id === router.query.id
-              )[0]
+              user.stats.filter((stat: any) => stat.id === router.query.id)[0]
             }
-          /> */}
+          />
         </Container>
       </AuthLayout>
     </div>

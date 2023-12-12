@@ -13,47 +13,20 @@ import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import { industryChoices, jobTitleChoices, marketChoices } from './constants';
 
-const schema = yup
-  .object({
-    year: yup
-      .number()
-      .required('Year is required')
-      .min(2000)
-      .max(new Date().getFullYear() + 1)
-      .positive()
-      .integer(),
-    quarter: yup
-      .number()
-      .required('Quarter is required')
-      .min(1)
-      .max(4)
-      .positive()
-      .integer(),
-    company: yup.string().required('Company is required'),
-    title: yup.string().required('Title is required'),
-    market: yup.string().required('Market is required'),
-    quota: yup.number().positive().integer().required('Quota is required'),
-    quota_attainment_percentage: yup
-      .number()
-      .max(999)
-      .positive()
-      .integer()
-      .required('Quota Attainment is required'),
-    average_deal_size: yup
-      .number()
-      .positive()
-      .integer()
-      .required('Average Deal Size is required'),
-    average_sales_cycle: yup
-      .number()
-      .positive()
-      .integer()
-      .required('Average Sales Cycle is required'),
-    industry: yup.string().required().required('Industry is required'),
-  })
-  .required();
+// yup validation for Stat
+const schema = yup.object().shape({
+  year: yup.number().required(),
+  quarter: yup.number().required(),
+  company: yup.string().required(),
+  title: yup.string().required(),
+  market: yup.string().required(),
+  quota: yup.number().required(),
+  quota_attainment_percentage: yup.number().required(),
+  average_deal_size: yup.number().required(),
+  average_sales_cycle: yup.number().required(),
+  industry: yup.string().required(),
+});
 
-// wip
 const NewStatForm = () => {
   const router = useRouter();
   const {
@@ -65,8 +38,7 @@ const NewStatForm = () => {
     resolver: yupResolver(schema),
   });
   const api = useAxios();
-  const data: any = useAppSelector((state) => state.auth);
-  const user: any = data.user.data;
+  const { user }: any = useAppSelector((state) => state.auth);
 
   console.log('errors', errors);
 
@@ -74,7 +46,7 @@ const NewStatForm = () => {
     try {
       console.log(data);
       const newCareerStat = {
-        user: user.id,
+        user: user.data.id,
         year: data.year,
         quarter: data.quarter,
         company: data.company,

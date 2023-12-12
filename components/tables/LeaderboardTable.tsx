@@ -32,6 +32,8 @@ import {
   compareItems,
 } from '@tanstack/match-sorter-utils';
 import useAxios from '@/lib/utils/axios';
+import { industryChoices } from '../forms/stats/constants';
+import { useRouter } from 'next/router';
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -75,81 +77,105 @@ const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
 //   return acc;
 // }, {});
 
-const columnHelper = createColumnHelper<LeaderboardStat>();
-const columns = [
-  columnHelper.accessor('quota_verified', {
-    header: () => <span>Quota Verified</span>,
-    cell: (info) =>
-      // eslint-disable-next-line @next/next/no-img-element
-      info.getValue() ? <img src={checkmark.src} alt="checkmark" /> : '-',
-    footer: (info) => info.column.id,
-  }),
-  columnHelper.accessor('user_data.user_status', {
-    header: () => `Users Status`,
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor((row) => row.year, {
-    id: 'year',
-    cell: (info) => <i>{info.getValue()}</i>,
-    header: () => <span>Year</span>,
-    footer: (info) => info.column.id,
-  }),
-  columnHelper.accessor((row) => row.quarter, {
-    id: 'quarter',
-    cell: (info) => <i>{info.getValue()}</i>,
-    header: () => <span>Quarter</span>,
-    footer: (info) => info.column.id,
-  }),
-  columnHelper.accessor('company', {
-    header: () => 'Company',
-    cell: (info) => info.renderValue(),
-  }),
-  columnHelper.accessor('title', {
-    header: () => <span>Title</span>,
-    footer: (info) => info.column.id,
-  }),
-  columnHelper.accessor('market', {
-    header: 'Market',
-  }),
-  columnHelper.accessor('quota_attainment_percentage', {
-    header: 'Quota Attainment Percent',
-    cell: (info) => `${info.renderValue()}%`,
-  }),
-  columnHelper.accessor('quota', {
-    header: 'Quota',
-    cell: (info) => `$${info.renderValue()}`,
-  }),
-  columnHelper.accessor('average_deal_size', {
-    header: 'Avg Deal Size',
-  }),
-  columnHelper.accessor('average_sales_cycle', {
-    header: 'Avg Sales Cycle',
-  }),
-  // columnHelper.accessor('status', {
-  //   header: 'Status',
-  // }),
-  columnHelper.accessor('industry', {
-    header: 'Industry',
-  }),
-];
-
 const LeaderboardTable = () => {
   const api = useAxios();
+  const router = useRouter();
   const [data, setData] = useState(() => []);
   const rerender = useReducer(() => ({}), {})[1];
+
+  const columnHelper = createColumnHelper<LeaderboardStat>();
+  const columns = [
+    columnHelper.accessor('quota_verified', {
+      header: () => <span>Quota Verified</span>,
+      cell: (info) =>
+        // eslint-disable-next-line @next/next/no-img-element
+        info.getValue() ? <img src={checkmark.src} alt="checkmark" /> : '-',
+      footer: (info) => info.column.id,
+    }),
+    columnHelper.accessor('user_data.user_status', {
+      header: () => `Users Status`,
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor((row) => row.year, {
+      id: 'year',
+      header: () => <span>Year</span>,
+      cell: (info) => info.getValue(),
+      footer: (info) => info.column.id,
+    }),
+    columnHelper.accessor((row) => row.quarter, {
+      id: 'quarter',
+      cell: (info) => info.getValue(),
+      header: () => <span>Quarter</span>,
+      footer: (info) => info.column.id,
+    }),
+    columnHelper.accessor('company', {
+      header: () => 'Company',
+      cell: (info) => info.renderValue(),
+    }),
+    columnHelper.accessor('title', {
+      header: () => <span>Title</span>,
+      footer: (info) => info.column.id,
+    }),
+    columnHelper.accessor('market', {
+      header: 'Market',
+    }),
+    columnHelper.accessor('quota_attainment_percentage', {
+      header: 'Quota Attainment Percent',
+      // round up to nearest whole number
+      cell: (info: any) =>
+        `${Math.round(info.getValue()).toLocaleString('en-US')}%`,
+    }),
+    columnHelper.accessor('quota', {
+      header: 'Quota',
+      cell: (info: any) => `$${info.renderValue().toLocaleString('en-US')}`,
+    }),
+    columnHelper.accessor('average_deal_size', {
+      header: 'Avg Deal Size',
+      cell: (info: any) =>
+        `$${Math.ceil(info.getValue()).toLocaleString('en-US')}`,
+    }),
+    columnHelper.accessor('average_sales_cycle', {
+      header: 'Avg Sales Cycle',
+    }),
+    columnHelper.accessor('industry', {
+      header: 'Industry',
+      cell: (info) => {
+        return industryChoices.filter(
+          (item) => item.value === info.getValue()
+        )[0].label;
+      },
+    }),
+    columnHelper.accessor('user_data', {
+      header: 'Actions',
+      cell: (info) => {
+        console.log('info.getValue', info.getValue());
+        return (
+          <Dropdown>
+            <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
+              Actions
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Item
+                onClick={() =>
+                  router.push({
+                    pathname: '/intros/new',
+                    query: { sales_rep: info.getValue().id },
+                  })
+                }
+              >
+                Request Intro
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        );
+      },
+    }),
+  ];
 
   useEffect(() => {
     const renderLeaderboardData = async () => {
       try {
-        // let leaderboardData = []
-        // const response = await api.get('/ytd-stats/');
-        // console.log('response', response);
-        // leaderboardData = response.data;
-
-        // get leaderboard data via the ytd stats endpoint
-        // get users data from the ytd-stats.user
-        // add user status as a row via setData
-
         const response = await api.get('/leaderboard/');
         const leaderboardData = response.data;
         console.log('leaderboardData', leaderboardData);
@@ -311,16 +337,12 @@ const LeaderboardTable = () => {
                           header.column.columnDef.header,
                           header.getContext()
                         )}
-                        {{
-                          // asc: ' 🔼',
-                          // desc: ' 🔽',
-                        }[header.column.getIsSorted() as string] ?? null}
+                        {{}[header.column.getIsSorted() as string] ?? null}
                       </div>
                     )}
                   </th>
                 );
               })}
-              <th>Actions</th>
             </tr>
           ))}
         </thead>
@@ -338,7 +360,7 @@ const LeaderboardTable = () => {
                     </td>
                   );
                 })}
-                <td>
+                {/* <td>
                   <Dropdown>
                     <Dropdown.Toggle
                       variant="outline-primary"
@@ -351,7 +373,7 @@ const LeaderboardTable = () => {
                       <Dropdown.Item>Request Intro</Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
-                </td>
+                </td> */}
               </tr>
             );
           })}

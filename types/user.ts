@@ -13,6 +13,28 @@ export interface RegisterFormInputs {
   password?: string;
   reference1?: string;
   reference2?: string;
+  references?: string[] | Reference[];
+}
+
+export interface Reference {
+  user_id?: string;
+  id?: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+}
+
+export interface Intro {
+  id?: string;
+  user_to: string;
+  user_from: string;
+  message: string;
+  accepted?: boolean;
+  accepted_date?: string;
+  declined?: boolean;
+  declined_date?: string;
+  datetime_created?: string;
 }
 
 // Data from the back end

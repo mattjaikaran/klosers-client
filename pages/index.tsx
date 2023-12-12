@@ -33,7 +33,7 @@ export default function Home() {
                 className="pill-btn"
                 onClick={() => router.push('/signup')}
               >
-                Create an Account
+                Create FREE Rep Account
               </Button>
               <Button
                 variant="outline-primary"
@@ -42,6 +42,12 @@ export default function Home() {
               >
                 Already have an Account?
               </Button>
+              <a
+                href="https://checkout.stripe.com/c/pay/cs_live_a1ozLf1vfwc56YS8AK4bM5lHCZSKBbefIDb8fzQlwNcMQn1pNTcs0X6uN2#fidkdWxOYHwnPyd1blppbHNgWjA0SDRNU0FMS01BdUBPY291fWdMZnBpaFVycjJCRHM1TGhdY01vcGc8T3xiM1JTMmZqV3ZRNkxqVjN3cXd%2FR21LZ2BMUWg0b0hES1drUnw8aERBd3JLY0hxNTVKQVN8PDFhSicpJ3VpbGtuQH11anZgYUxhJz8nYFNkYVZMYExCMkRgYjU1NmZmJ3gl"
+                target="_blank"
+              >
+                <Button className="pill-btn">Create Company Account</Button>
+              </a>
             </div>
           </div>
         </Container>
