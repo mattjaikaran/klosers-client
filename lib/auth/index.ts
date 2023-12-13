@@ -24,8 +24,8 @@ export interface LoginFormInputs {
 }
 
 export interface SignupFormInputs {
-  first_name: string;
-  last_name: string;
+  first_name?: string;
+  last_name?: string;
   email: string;
   username: string;
   password1?: string;

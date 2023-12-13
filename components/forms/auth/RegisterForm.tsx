@@ -14,8 +14,6 @@ import Button from 'react-bootstrap/Button';
 
 const schema = yup
   .object({
-    first_name: yup.string().required('First Name is required'),
-    last_name: yup.string().required('Last Name is required'),
     username: yup.string().required(),
     email: yup.string().required('Email is required').email('Email is invalid'),
     password1: yup
@@ -45,8 +43,8 @@ const RegisterForm = () => {
       console.log('data in onSubmit', data);
       const userInfo = {
         email: data.email,
-        first_name: data.first_name,
-        last_name: data.last_name,
+        // first_name: data.first_name,
+        // last_name: data.last_name,
         username: data.username,
         password1: data.password1,
         password2: data.password2,
@@ -63,7 +61,7 @@ const RegisterForm = () => {
       if (registerResponse.status === 201) {
         return router.push({
           pathname: '/signin',
-          query: { email: data.email },
+          query: { username: data.username },
         });
       }
       return registerResponse;
@@ -80,22 +78,22 @@ const RegisterForm = () => {
   return (
     <>
       <Form validated={!errors} onSubmit={handleSubmit(onSubmit)}>
-        <Form.Group className="mb-3" controlId="registerFormFirstName">
+        {/* <Form.Group className="mb-3" controlId="registerFormFirstName">
           <Form.Label>First Name</Form.Label>
           <Form.Control
             type="text"
             placeholder="Enter First Name"
             {...register('first_name')}
           />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="registerFormLastName">
+        </Form.Group> */}
+        {/* <Form.Group className="mb-3" controlId="registerFormLastName">
           <Form.Label>Last Name</Form.Label>
           <Form.Control
             type="text"
             placeholder="Enter Last Name"
             {...register('last_name')}
           />
-        </Form.Group>
+        </Form.Group> */}
         <Form.Group className="mb-3" controlId="registerFormEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control

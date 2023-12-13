@@ -32,6 +32,7 @@ const EditProfileForm = ({ user }: { user: User }) => {
         market_type: data.market_type,
         linkedin_profile: data.linkedin_profile,
         about: data.about,
+        img_url: data.img_url,
         user_status: data.user_status ?? user.user_status,
       };
       const response = await api.patch(`/users/${user.id}/`, updatedUserData);
@@ -61,6 +62,7 @@ const EditProfileForm = ({ user }: { user: User }) => {
             placeholder="Enter username"
             defaultValue={user.username}
             {...register('username')}
+            required
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="editProfileFormEmail">
@@ -70,6 +72,7 @@ const EditProfileForm = ({ user }: { user: User }) => {
             placeholder="Enter Email"
             defaultValue={user.email}
             {...register('email')}
+            required
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="editProfileFormFirstName">
@@ -79,6 +82,7 @@ const EditProfileForm = ({ user }: { user: User }) => {
             placeholder="Enter First Name"
             defaultValue={user.first_name}
             {...register('first_name')}
+            required
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="editProfileFormLastName">
@@ -88,6 +92,16 @@ const EditProfileForm = ({ user }: { user: User }) => {
             placeholder="Enter Last Name"
             defaultValue={user.last_name}
             {...register('last_name')}
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="editProfileFormImgUrl">
+          <Form.Label>Image URL</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter Image URL"
+            defaultValue={user.img_url}
+            {...register('img_url')}
           />
         </Form.Group>
 

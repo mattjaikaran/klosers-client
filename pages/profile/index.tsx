@@ -76,9 +76,9 @@ export default function MyProfile() {
               <Row>
                 <Col>
                   <Image
-                    src={avatar.src}
+                    src={user.data.img_url ?? avatar.src}
+                    className="img-fluid"
                     alt="avatar placeholder"
-                    roundedCircle
                   />
                   <p className="mt-5">
                     <Link href="/profile/edit" className="text-muted">
@@ -123,7 +123,7 @@ export default function MyProfile() {
 
               {/* References */}
               <h5>References</h5>
-              {user.data.references.length > 0
+              {user?.data?.references?.length > 0
                 ? user.data.references.map((item: Reference, index: number) => (
                     <div key={index}>
                       <p>

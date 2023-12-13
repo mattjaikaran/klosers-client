@@ -4,8 +4,8 @@ export interface LoginFormInputs {
 }
 
 export interface RegisterFormInputs {
-  first_name: string;
-  last_name: string;
+  first_name?: string;
+  last_name?: string;
   username: string;
   email: string;
   password1: string;
@@ -50,7 +50,8 @@ export interface User {
   company: string;
   profile_visibility: string;
   linkedin_profile: string;
-  user_fit_score: number;
+  user_fit_score?: number;
+  img_url?: string;
   is_sales_rep: boolean;
   is_company: boolean;
   leaderboard_access: boolean;

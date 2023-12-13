@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useAppDispatch } from '@/lib/store/redux';
 import { userLogin } from '@/lib/store/authSlice';
@@ -13,18 +15,38 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+// yup validation schema user/password
+const schema = yup
+  .object({
+    username: yup.string().required(),
+    password: yup.string().required(),
+  })
+  .required();
+
 const LoginForm = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [error, setError] = useState('');
   const USER_LOCAL_STORAGE_KEY = 'USER_KEY';
-  const { register, handleSubmit } = useForm<LoginFormInputs>();
+  const { register, handleSubmit } = useForm<LoginFormInputs>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      // @ts-ignore
+      username: router.query.username,
+      password: '',
+    },
+  });
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     setError('');
+    console.log('data onSubmit LoginForm', data);
     try {
+      const userInfo = {
+        username: data.username,
+        password: data.password,
+      };
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      const response = await useLogin(data);
+      const response = await useLogin(userInfo);
       const user = response.data.user;
 
       if (response.status === 403) {
@@ -46,7 +68,13 @@ const LoginForm = () => {
           localStorage.setItem('REFRESH_TOKEN', JSON.stringify(user.refresh));
           // set user data in global state
           dispatch(userLogin(apiUser));
-          router.push('/profile');
+          // if user.first_name is null, redirect to /profile/edit to complete profile
+          // otherwise, redirect to /profile
+          if (!apiUser.first_name) {
+            router.push('/profile/edit');
+          } else {
+            router.push('/profile');
+          }
         } catch (error: any) {
           console.log('error', error);
           console.log('error.response', error.response);
@@ -66,6 +94,8 @@ const LoginForm = () => {
           <Form.Label>Username</Form.Label>
           <Form.Control
             type="text"
+            // default value router.query.username
+            defaultValue={router.query.username}
             placeholder="Enter username"
             {...register('username')}
           />

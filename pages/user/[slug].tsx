@@ -21,6 +21,7 @@ import AwardsRecognition from '@/components/AwardsRecognition';
 import UserProfileStatsTable from '@/components/tables/UserProfileStatsTable';
 import avatar from '@/assets/images/avatar-placeholder.png';
 import { AwardRecognitionInputs, Stat } from '@/types/stats';
+import Link from 'next/link';
 
 export default function MyProfile() {
   const api = useAxios();
@@ -104,10 +105,14 @@ export default function MyProfile() {
           {/* @ts-ignore */}
           {!user.data.first_name ? (
             <>
-              <p>
-                Searching for <strong>{router.query.slug}</strong>
-              </p>
+              <p>User not found.</p>
               <Spinner />
+              <p>
+                <Link href="/profile">Go back to Profile</Link>
+              </p>
+              {setTimeout(() => {
+                router.push('/profile');
+              }, 3000)}
             </>
           ) : (
             <Row>
@@ -146,14 +151,15 @@ export default function MyProfile() {
                     LinkedIn
                   </a>
                 </p>
-                <Button className="pill-btn">Share Profile</Button>
+                {/* will bring back when messaging implemented */}
+                {/* <Button className="pill-btn">Share Profile</Button>
                 <Button
                   variant="outline-primary"
                   className="pill-btn mx-2"
                   disabled
                 >
                   Message
-                </Button>
+                </Button> */}
               </Col>
               <Col md={6}>
                 <h4>About</h4>
