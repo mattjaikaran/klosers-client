@@ -14,7 +14,7 @@ export const authSlice = createSlice({
   name: AUTH,
   initialState,
   reducers: {
-    //Actions
+    // Actions
     userLogin: (state, action) => {
       state.user = {
         ...state.user,

@@ -1,11 +1,12 @@
 import useAxios from '@/lib/utils/axios';
-import { useAppSelector } from '@/lib/store/redux';
+import { useAppDispatch, useAppSelector } from '@/lib/store/redux';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { AwardRecognitionInputs } from '@/types/stats';
 
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useRouter } from 'next/router';
+import { getMyUserAwards } from '@/lib/store/authSlice';
 
 const NewAwardRecognitionForm = () => {
   const {
@@ -15,6 +16,7 @@ const NewAwardRecognitionForm = () => {
   } = useForm<AwardRecognitionInputs>();
   const api = useAxios();
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const data: any = useAppSelector((state) => state.auth);
   const user: any = data.user.data;
 
@@ -30,6 +32,9 @@ const NewAwardRecognitionForm = () => {
       const response = await api.post('/awards/', newAwardStat);
       console.log('response', response);
       if (response.status === 201) {
+        const updatedAwards = await api.get(`/awards/?user=${user.id}`);
+        console.log('updatedAwards', updatedAwards);
+        dispatch(getMyUserAwards(updatedAwards.data));
         router.push('/profile');
       }
       return response;

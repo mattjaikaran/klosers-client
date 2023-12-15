@@ -1,4 +1,4 @@
-import { useAppSelector } from '@/lib/store/redux';
+import { useAppDispatch, useAppSelector } from '@/lib/store/redux';
 import useAxios from '@/lib/utils/axios';
 import { useRouter } from 'next/router';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -7,6 +7,7 @@ import Button from 'react-bootstrap/Button';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Reference } from '@/types/user';
+import { updateMyUserDetails } from '@/lib/store/authSlice';
 
 // yup validation
 const schema = yup.object().shape({
@@ -19,6 +20,7 @@ const schema = yup.object().shape({
 const NewReferenceForm = () => {
   const api = useAxios();
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const { user }: any = useAppSelector((state) => state.auth);
   console.log('user', user);
   console.log('user.data', user.data);
@@ -47,6 +49,10 @@ const NewReferenceForm = () => {
       const response = await api.post('/references/', newReference);
       console.log('response', response);
       if (response.status === 201) {
+        // update the user state via updateMyUserDetails and api.get(users/userid)
+        const updatedReferences = await api.get(`/users/${user.data.id}`);
+        console.log('updatedReferences', updatedReferences);
+        dispatch(updateMyUserDetails(updatedReferences.data));
         router.push('/profile');
       }
       return response;

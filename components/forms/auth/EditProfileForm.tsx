@@ -103,6 +103,15 @@ const EditProfileForm = ({ user }: { user: User }) => {
             defaultValue={user.img_url}
             {...register('img_url')}
           />
+          <Form.Text className="text-muted">
+            How to add URL link{' '}
+            <a
+              href="https://support.google.com/websearch/answer/118238"
+              target="_blank"
+            >
+              here
+            </a>
+          </Form.Text>
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="editProfileFormTitle">

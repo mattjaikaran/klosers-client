@@ -1,7 +1,7 @@
 import useAxios from '@/lib/utils/axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
-import { useAppSelector } from '@/lib/store/redux';
+import { useAppDispatch, useAppSelector } from '@/lib/store/redux';
 import { useRouter } from 'next/router';
 import { Stat } from '@/types/stats';
 
@@ -12,6 +12,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import { industryChoices, jobTitleChoices, marketChoices } from './constants';
+import { getMyUserStats } from '@/lib/store/authSlice';
 
 // yup validation for Stat
 const schema = yup.object().shape({
@@ -20,15 +21,18 @@ const schema = yup.object().shape({
   company: yup.string().required(),
   title: yup.string().required(),
   market: yup.string().required(),
-  quota: yup.number().required(),
-  quota_attainment_percentage: yup.number().required(),
-  average_deal_size: yup.number().required(),
+  // quota no longer than 8 digits
+  quota: yup.number().required().max(99999999),
+  quota_attainment_percentage: yup.number().required().max(10000),
+  // avg deal size no longer than 8 digits
+  average_deal_size: yup.number().required().max(99999999),
   average_sales_cycle: yup.number().required(),
   industry: yup.string().required(),
 });
 
 const NewStatForm = () => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const {
     register,
     handleSubmit,
@@ -39,6 +43,7 @@ const NewStatForm = () => {
   });
   const api = useAxios();
   const { user }: any = useAppSelector((state) => state.auth);
+  console.log('user', user);
 
   console.log('errors', errors);
 
@@ -59,9 +64,16 @@ const NewStatForm = () => {
         industry: data.industry,
       };
       console.log('newCareerStat', newCareerStat);
+
+      // post new stat
       const response = await api.post('/stats/', newCareerStat);
       console.log('response', response);
       if (response.status === 201) {
+        const updatedUser = await api.get(`/users/${user.data.id}/`);
+        console.log('updatedUser', updatedUser);
+        dispatch(getMyUserStats(updatedUser.data.stats));
+
+        // redirect to profile
         router.push('/profile');
       }
       return response;

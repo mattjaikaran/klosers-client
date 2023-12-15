@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect } from 'react';
+import { useMemo } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -11,14 +11,13 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
-import Button from 'react-bootstrap/Button';
 
 import StatsTable from '@/components/tables/StatsTable';
 import AwardsRecognition from '@/components/AwardsRecognition';
 
 import avatar from '@/assets/images/avatar-placeholder.png';
 import { getMyUserStats, getMyUserAwards } from '@/lib/store/authSlice';
-import { Reference } from '@/types/user';
+import References from '@/components/References';
 
 export default function MyProfile() {
   const api = useAxios();
@@ -26,7 +25,7 @@ export default function MyProfile() {
   const dispatch = useAppDispatch();
   const { user }: any = useAppSelector((state) => state.auth);
 
-  useEffect(() => {
+  useMemo(() => {
     const renderMyUserData = async () => {
       try {
         const response = await api.get(`/stats/`);
@@ -44,7 +43,7 @@ export default function MyProfile() {
   }, []);
 
   // get user awards
-  useEffect(() => {
+  useMemo(() => {
     const renderMyUserAwards = async () => {
       try {
         const response = await api.get(`/awards/`);
@@ -120,51 +119,12 @@ export default function MyProfile() {
             <Col md={6}>
               <h4>About</h4>
               <p>{user.data.about}</p>
-
-              {/* References */}
-              <h5>References</h5>
-              {user?.data?.references?.length > 0
-                ? user.data.references.map((item: Reference, index: number) => (
-                    <div key={index}>
-                      <p>
-                        <strong>Name: </strong>
-                        <span>
-                          {item.first_name} {item.last_name}
-                        </span>
-                      </p>
-                      <p>
-                        <strong>Email: </strong>
-                        <span>{item.email}</span>
-                      </p>
-                      <p>
-                        <strong>Phone: </strong>
-                        <span>{item.phone}</span>
-                      </p>
-                      {/* edit button */}
-                      <p>
-                        <Link
-                          href={`/references/edit/${item.id}`}
-                          className="text-muted"
-                        >
-                          Edit
-                        </Link>
-                      </p>
-                    </div>
-                  ))
-                : null}
-              {/* Button to add a new reference */}
-              <Button
-                variant="primary"
-                className="pill-btn"
-                onClick={() => router.push('/references/new')}
-              >
-                Add Reference
-              </Button>
             </Col>
           </Row>
           <h5>Stats</h5>
           <StatsTable data={user.stats} />
           <AwardsRecognition data={user.awards} />
+          <References data={user.data.references} />
         </Container>
       </AuthLayout>
     </>

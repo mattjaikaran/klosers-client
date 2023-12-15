@@ -22,6 +22,7 @@ import UserProfileStatsTable from '@/components/tables/UserProfileStatsTable';
 import avatar from '@/assets/images/avatar-placeholder.png';
 import { AwardRecognitionInputs, Stat } from '@/types/stats';
 import Link from 'next/link';
+import References from '@/components/References';
 
 export default function MyProfile() {
   const api = useAxios();
@@ -57,7 +58,8 @@ export default function MyProfile() {
             console.log(
               'awardResponse.data.filter',
               awardResponse.data.filter(
-                (stat: AwardRecognitionInputs) => stat.user === username
+                (stat: AwardRecognitionInputs) =>
+                  stat.user_data.username === username
               )
             );
             dispatch(
@@ -76,7 +78,8 @@ export default function MyProfile() {
             dispatch(
               getUserAwards(
                 awardResponse.data.filter(
-                  (stat: AwardRecognitionInputs) => stat.user === username
+                  (stat: AwardRecognitionInputs) =>
+                    stat.user_data.username === username
                 )
               )
             );
@@ -118,9 +121,9 @@ export default function MyProfile() {
             <Row>
               <Col>
                 <Image
-                  src={avatar.src}
+                  src={user.data.img_url ?? avatar.src}
+                  className="img-fluid"
                   alt="avatar placeholder"
-                  roundedCircle
                 />
               </Col>
               <Col>
@@ -164,21 +167,6 @@ export default function MyProfile() {
               <Col md={6}>
                 <h4>About</h4>
                 <p>{user.data.about}</p>
-
-                {/* references */}
-                <h5>References</h5>
-                {user.data.references.map((reference: any) => (
-                  <p key={reference.id}>
-                    <strong>
-                      {reference.first_name} {reference.last_name}
-                    </strong>
-                    {reference.company}
-                    <br />
-                    {reference.email}
-                    <br />
-                    {reference.phone}
-                  </p>
-                ))}
               </Col>
             </Row>
           )}
@@ -186,6 +174,7 @@ export default function MyProfile() {
           <h5>Stats</h5>
           <UserProfileStatsTable data={user.stats} />
           <AwardsRecognition data={user.awards} />
+          <References data={user.data.references} />
         </Container>
       </AuthLayout>
     </>

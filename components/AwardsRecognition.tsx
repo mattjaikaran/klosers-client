@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import Button from 'react-bootstrap/Button';
 import { AwardRecognitionInputs } from '@/types/stats';
 import { useAppSelector } from '@/lib/store/redux';
+import Link from 'next/link';
 
 const AwardsRecognition = ({ data }: { data: AwardRecognitionInputs[] }) => {
   const router = useRouter();
@@ -14,13 +15,13 @@ const AwardsRecognition = ({ data }: { data: AwardRecognitionInputs[] }) => {
       {data?.length ? (
         data.map((award: AwardRecognitionInputs) => (
           <p key={award.id}>
-            <Button
-              variant="link"
-              className="text-muted"
-              onClick={() => router.push(`/awards/edit/${award.id}`)}
-            >
-              Edit
-            </Button>
+            {router.pathname === '/profile' ? (
+              <>
+                <Link className="text-muted" href={`/awards/edit/${award.id}`}>
+                  Edit
+                </Link>{' '}
+              </>
+            ) : null}
             <span>{award.text}</span>
           </p>
         ))
@@ -30,7 +31,7 @@ const AwardsRecognition = ({ data }: { data: AwardRecognitionInputs[] }) => {
 
       {router.pathname === '/profile' ? (
         <Button
-          className="mt-3 pill-btn"
+          className="pill-btn"
           variant="outline-primary"
           onClick={() => router.push(`/awards/new`)}
         >

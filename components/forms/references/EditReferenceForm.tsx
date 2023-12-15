@@ -1,13 +1,12 @@
-import { useAppSelector } from '@/lib/store/redux';
+import { useAppDispatch, useAppSelector } from '@/lib/store/redux';
 import useAxios from '@/lib/utils/axios';
 import { useRouter } from 'next/router';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { Reference } from '@/types/user';
 import { useEffect, useState } from 'react';
+import { updateMyUserDetails } from '@/lib/store/authSlice';
 
 const EditReferenceForm = ({ reference }: { reference: string }) => {
   const [referenceData, setReferenceData] = useState<Reference>(
@@ -15,6 +14,7 @@ const EditReferenceForm = ({ reference }: { reference: string }) => {
   );
   const api = useAxios();
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const { user }: any = useAppSelector((state) => state.auth);
 
   useEffect(() => {
@@ -58,6 +58,10 @@ const EditReferenceForm = ({ reference }: { reference: string }) => {
       );
       console.log('response', response);
       if (response.status === 200) {
+        // update the user state via updateMyUserDetails
+        const updatedUser = await api.get(`/users/${user.data.id}/`);
+        console.log('updatedUser', updatedUser);
+        dispatch(updateMyUserDetails(updatedUser.data));
         router.push('/profile');
       }
       return response;

@@ -35,6 +35,7 @@ export interface AwardRecognitionInputs {
   type: string;
   text: string;
   user?: string | number;
+  user_data?: any;
 }
 
 // new Stat => refactored from YTD and Career stats to one stat
