@@ -17,6 +17,8 @@ const schema = yup.object().shape({
   phone: yup.string().required(),
 });
 
+const descriptionText = `To get your quota verification checkmark, please add references who will back your performance`;
+
 const NewReferenceForm = () => {
   const api = useAxios();
   const router = useRouter();
@@ -62,6 +64,7 @@ const NewReferenceForm = () => {
   };
   return (
     <>
+      <p>{descriptionText}</p>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Form.Group className="mb-3" controlId="formReferenceFirstName">
           <Form.Label>First Name</Form.Label>
