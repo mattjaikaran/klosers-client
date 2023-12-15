@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import axios from 'axios';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -13,6 +12,7 @@ import { LoginFormInputs } from '@/types/user';
 import Alert from 'react-bootstrap/Alert';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import useAxios from '@/lib/utils/axios';
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // yup validation schema user/password
@@ -25,6 +25,7 @@ const schema = yup
 
 const LoginForm = () => {
   const router = useRouter();
+  const api = useAxios();
   const dispatch = useAppDispatch();
   const [error, setError] = useState('');
   const USER_LOCAL_STORAGE_KEY = 'USER_KEY';
@@ -39,7 +40,6 @@ const LoginForm = () => {
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     setError('');
-    console.log('data onSubmit LoginForm', data);
     try {
       const userInfo = {
         username: data.username,
@@ -57,7 +57,7 @@ const LoginForm = () => {
       }
       if (response.status === 200) {
         try {
-          const userResponse = await axios.get(
+          const userResponse = await api.get(
             `${API_URL}/users/${response.data?.user.id}/`
           );
           const apiUser = userResponse.data;
