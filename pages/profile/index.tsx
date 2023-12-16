@@ -75,7 +75,8 @@ export default function MyProfile() {
               <Row>
                 <Col>
                   <Image
-                    src={user.data.img_url ?? avatar.src}
+                    // src should img_url or avatar placeholder
+                    src={user.data.img_url || avatar.src}
                     className="img-fluid"
                     alt="avatar placeholder"
                   />

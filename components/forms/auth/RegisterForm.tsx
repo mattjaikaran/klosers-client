@@ -43,8 +43,6 @@ const RegisterForm = () => {
       console.log('data in onSubmit', data);
       const userInfo = {
         email: data.email,
-        // first_name: data.first_name,
-        // last_name: data.last_name,
         username: data.username,
         password1: data.password1,
         password2: data.password2,
@@ -59,10 +57,7 @@ const RegisterForm = () => {
         }
       }
       if (registerResponse.status === 201) {
-        return router.push({
-          pathname: '/signin',
-          query: { username: data.username },
-        });
+        return router.push('/signin');
       }
       return registerResponse;
     } catch (error: any) {
@@ -78,22 +73,6 @@ const RegisterForm = () => {
   return (
     <>
       <Form validated={!errors} onSubmit={handleSubmit(onSubmit)}>
-        {/* <Form.Group className="mb-3" controlId="registerFormFirstName">
-          <Form.Label>First Name</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter First Name"
-            {...register('first_name')}
-          />
-        </Form.Group> */}
-        {/* <Form.Group className="mb-3" controlId="registerFormLastName">
-          <Form.Label>Last Name</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter Last Name"
-            {...register('last_name')}
-          />
-        </Form.Group> */}
         <Form.Group className="mb-3" controlId="registerFormEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control
@@ -135,11 +114,7 @@ const RegisterForm = () => {
       </Form>
       {Object.values(errors).length ? (
         <Alert className="mt-3" variant="danger">
-          {errors.first_name
-            ? errors.first_name.message
-            : errors.last_name
-            ? errors.last_name.message
-            : errors.username
+          {errors.username
             ? errors.username.message
             : errors.email
             ? errors.email.message
