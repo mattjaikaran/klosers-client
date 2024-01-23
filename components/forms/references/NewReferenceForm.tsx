@@ -25,7 +25,7 @@ const schema = yup.object().shape({
 const descriptionText = `To get your quota verification checkmark, please add references who will back your performance`;
 
 const NewReferenceForm = () => {
-  const [serverError, setServerError] = useState(null);
+  const [serverError, setServerError] = useState('');
 
   const api = useAxios();
   const router = useRouter();
@@ -60,15 +60,29 @@ const NewReferenceForm = () => {
         phone: data.phone,
       };
       console.log('newReference', newReference);
+
+      // rtk query
       const response = await createReference(newReference);
       console.log('response', response);
+
       // @ts-ignore
       if (response?.data) {
         // update the user state via updateMyUserDetails and api.get(users/userid)
-        const updatedReferences = await api.get(`/users/${user.data.id}`);
+        const updatedReferences = await api.get(`/users/${user.data.id}/`);
         console.log('updatedReferences', updatedReferences);
         dispatch(updateMyUserDetails(updatedReferences.data));
         router.push('/profile');
+      }
+
+      // @ts-ignore
+      if (response?.error) {
+        setServerError(
+          'Something went wrong. Redirecting you to your profile.'
+        );
+        setTimeout(() => {
+          setServerError('');
+          router.push('/profile');
+        }, 3000);
       }
       return response;
     } catch (error: any) {

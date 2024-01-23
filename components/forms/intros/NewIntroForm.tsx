@@ -72,6 +72,12 @@ const NewIntroForm = () => {
       if (response.status === 201) {
         router.push('/leaderboard');
       }
+      if (response.status === 500) {
+        setError('Something went wrong. Redirecting you to the leaderboard');
+        setTimeout(() => {
+          router.push('/leaderboard');
+        }, 3000);
+      }
     } catch (error: any) {
       console.log('error', error);
       if (error.response) {
