@@ -1,64 +1,57 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useMemo } from 'react';
+/* eslint-disable react-hooks/rules-of-hooks */
+
+import { useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useAppDispatch, useAppSelector } from '@/lib/store/redux';
-import useAxios from '@/lib/utils/axios';
+import { useAppSelector } from '@/lib/store/redux';
 import AuthLayout from '@/layouts/AuthLayout';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
+import Spinner from 'react-bootstrap/Spinner';
+import avatar from '@/assets/images/avatar-placeholder.png';
 
 import StatsTable from '@/components/tables/StatsTable';
 import AwardsRecognition from '@/components/AwardsRecognition';
-
-import avatar from '@/assets/images/avatar-placeholder.png';
-import { getMyUserStats, getMyUserAwards } from '@/lib/store/authSlice';
 import References from '@/components/References';
 
+import { useGetUserStatsQuery } from '@/lib/store/statApi';
+import { useFetchUserQuery } from '@/lib/store/userApi';
+import { useGetUserAwardsQuery } from '@/lib/store/awardApi';
+import { Award, Stat } from '@/types/stats';
+import { User } from '@/types/user';
+
 export default function MyProfile() {
-  const api = useAxios();
-  const router = useRouter();
-  const dispatch = useAppDispatch();
   const { user }: any = useAppSelector((state) => state.auth);
+  const { data: userData, refetch: userRefetch } = useFetchUserQuery(
+    user?.data?.id
+  );
+  // @ts-ignore
+  const { data: stats, refetch: statRefetch } = useGetUserStatsQuery(
+    user?.data?.id
+  );
+  const { data: awards, refetch: awardRefetch } = useGetUserAwardsQuery(
+    user?.data?.id
+  );
 
-  useMemo(() => {
-    const renderMyUserData = async () => {
-      try {
-        const response = await api.get(`/stats/`);
-        console.log('response', response);
-        dispatch(
-          getMyUserStats(
-            response.data.filter((item: any) => item.user === user.data.id)
-          )
-        );
-      } catch (error) {
-        console.error('error', error);
-      }
-    };
-    renderMyUserData();
-  }, []);
+  console.log('userData', userData);
+  console.log('stats', stats);
+  console.log('awards', awards);
 
-  // get user awards
-  useMemo(() => {
-    const renderMyUserAwards = async () => {
-      try {
-        const response = await api.get(`/awards/`);
-        console.log('response', response);
-        dispatch(
-          getMyUserAwards(
-            response.data.filter((item: any) => item.user === user.data.id)
-          )
-        );
-      } catch (error) {
-        console.error('error', error);
-      }
-    };
-    renderMyUserAwards();
-  }, []);
+  // @ts-ignore
+  const myUser = userData?.results.filter(
+    (item: User) => item.id === user?.data?.id
+  )[0];
+  console.log('myUser', myUser);
+  console.log('myUser?.references', myUser?.references);
+
+  useEffect(() => {
+    userRefetch();
+    statRefetch();
+    awardRefetch();
+  }, [userData, stats, awards, userRefetch, statRefetch, awardRefetch]);
 
   return (
     <>
@@ -70,62 +63,87 @@ export default function MyProfile() {
       </Head>
       <AuthLayout>
         <Container>
-          <Row className="mt-3">
-            <Col md={6}>
-              <Row>
-                <Col>
-                  <Image
-                    // src should img_url or avatar placeholder
-                    src={user.data.img_url || avatar.src}
-                    className="img-fluid"
-                    alt="avatar placeholder"
-                  />
-                  <p className="mt-5">
-                    <Link href="/profile/edit" className="text-muted">
-                      Edit Profile
-                    </Link>
-                  </p>
+          {user.data.id ? (
+            <>
+              <Row className="mt-3">
+                <Col md={6}>
+                  <Row>
+                    <Col>
+                      <Image
+                        src={user.data.img_url || avatar.src}
+                        className="img-fluid"
+                        alt="avatar placeholder"
+                      />
+                      <p className="mt-5">
+                        <Link href="/profile/edit" className="text-muted">
+                          Edit Profile
+                        </Link>
+                      </p>
+                    </Col>
+                    <Col>
+                      <p>
+                        <strong>Name: </strong>
+                        <span>
+                          {user.data.first_name} {user.data.last_name}
+                        </span>
+                      </p>
+                      <p>
+                        <strong>Title: </strong>
+                        <span>{user.data.title}</span>
+                      </p>
+                      <p>
+                        <strong>Company: </strong>
+                        <span>{user.data.company}</span>
+                      </p>
+                      <p>
+                        <strong>Market: </strong>
+                        <span>{user.data.market_type}</span>
+                      </p>
+                      <p>
+                        <strong>Status: </strong>
+                        <span>{user.data.user_status}</span>
+                      </p>
+                      <p>
+                        <a href={user.data.linkedin_profile} target="_blank">
+                          LinkedIn
+                        </a>
+                      </p>
+                    </Col>
+                  </Row>
                 </Col>
-                <Col>
-                  <p>
-                    <strong>Name: </strong>
-                    <span>
-                      {user.data.first_name} {user.data.last_name}
-                    </span>
-                  </p>
-                  <p>
-                    <strong>Title: </strong>
-                    <span>{user.data.title}</span>
-                  </p>
-                  <p>
-                    <strong>Company: </strong>
-                    <span>{user.data.company}</span>
-                  </p>
-                  <p>
-                    <strong>Market: </strong>
-                    <span>{user.data.market_type}</span>
-                  </p>
-                  <p>
-                    <strong>Status: </strong>
-                    <span>{user.data.user_status}</span>
-                  </p>
-                  <p>
-                    <a href={user.data.linkedin_profile} target="_blank">
-                      LinkedIn
-                    </a>
-                  </p>
+                <Col md={6}>
+                  <h4>About</h4>
+                  <p>{user.data.about}</p>
                 </Col>
               </Row>
-            </Col>
-            <Col md={6}>
-              <h4>About</h4>
-              <p>{user.data.about}</p>
-            </Col>
-          </Row>
-          <h5>Stats</h5>
-          <StatsTable data={user.stats} />
-          <AwardsRecognition data={user.awards} />
-          <References data={user.data.references} />
+              <h5>Stats</h5>
+              <StatsTable
+                data={
+                  // @ts-ignore
+                  stats?.results.filter(
+                    (stat: Stat) => stat.user === user.data.id
+                  ) || []
+                }
+              />
+              <AwardsRecognition
+                data={
+                  // @ts-ignore
+                  awards?.results.filter(
+                    (award: Award) => award.user === user?.data?.id
+                  ) || []
+                }
+              />
+              <References
+                data={
+                  myUser?.references.length
+                    ? myUser?.references
+                    : user.data.references
+                }
+              />
+            </>
+          ) : (
+            <Spinner />
+          )}
         </Container>
       </AuthLayout>
     </>

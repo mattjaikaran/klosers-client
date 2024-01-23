@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/lib/store/redux';
 import useAxios from '@/lib/utils/axios';
 import { useRouter } from 'next/router';
@@ -8,6 +9,10 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Reference } from '@/types/user';
 import { updateMyUserDetails } from '@/lib/store/authSlice';
+import {
+  useGetReferencesQuery,
+  useCreateReferenceMutation,
+} from '@/lib/store/referenceApi';
 
 // yup validation
 const schema = yup.object().shape({
@@ -20,12 +25,17 @@ const schema = yup.object().shape({
 const descriptionText = `To get your quota verification checkmark, please add references who will back your performance`;
 
 const NewReferenceForm = () => {
+  const [serverError, setServerError] = useState(null);
+
   const api = useAxios();
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { user }: any = useAppSelector((state) => state.auth);
   console.log('user', user);
   console.log('user.data', user.data);
+  const { data, error: referencesError, isLoading } = useGetReferencesQuery();
+  const [createReference, { error: createReferenceError }] =
+    useCreateReferenceMutation();
 
   const {
     register,
@@ -37,7 +47,9 @@ const NewReferenceForm = () => {
 
   console.log('errors from react hook form', errors);
 
-  const onSubmit: SubmitHandler<Reference> = async (data) => {
+  const onSubmit: SubmitHandler<Reference> = async (
+    data: Partial<Reference>
+  ) => {
     try {
       console.log(data);
       const newReference = {
@@ -48,9 +60,10 @@ const NewReferenceForm = () => {
         phone: data.phone,
       };
       console.log('newReference', newReference);
-      const response = await api.post('/references/', newReference);
+      const response = await createReference(newReference);
       console.log('response', response);
-      if (response.status === 201) {
+      // @ts-ignore
+      if (response?.data) {
         // update the user state via updateMyUserDetails and api.get(users/userid)
         const updatedReferences = await api.get(`/users/${user.data.id}`);
         console.log('updatedReferences', updatedReferences);
@@ -58,8 +71,12 @@ const NewReferenceForm = () => {
         router.push('/profile');
       }
       return response;
-    } catch (error) {
+    } catch (error: any) {
       console.error('error', error);
+      console.log('error.response', error.response);
+      if (error.response) {
+        setServerError(error.response.data.message);
+      }
     }
   };
   return (

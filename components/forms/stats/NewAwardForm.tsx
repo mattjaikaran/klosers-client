@@ -1,47 +1,45 @@
-import useAxios from '@/lib/utils/axios';
-import { useAppDispatch, useAppSelector } from '@/lib/store/redux';
+import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { AwardRecognitionInputs } from '@/types/stats';
-
+import { useAppDispatch, useAppSelector } from '@/lib/store/redux';
+import { useRouter } from 'next/router';
+import { Award } from '@/types/stats';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { useRouter } from 'next/router';
 import { getMyUserAwards } from '@/lib/store/authSlice';
+import { useCreateAwardMutation } from '@/lib/store/awardApi';
 
-const NewAwardRecognitionForm = () => {
+const NewAwardForm = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<AwardRecognitionInputs>();
-  const api = useAxios();
+  } = useForm<Award>();
+  const [createAward, { isLoading }] = useCreateAwardMutation();
   const router = useRouter();
+  const [error, setError] = useState('');
   const dispatch = useAppDispatch();
-  const data: any = useAppSelector((state) => state.auth);
-  const user: any = data.user.data;
+  const { user }: any = useAppSelector((state) => state.auth);
 
-  const onSubmit: SubmitHandler<AwardRecognitionInputs> = async (data) => {
+  const onSubmit: SubmitHandler<Award> = async (data) => {
+    setError('');
     try {
-      console.log(data);
-      const newAwardStat = {
-        user: user.id,
+      const newAward = {
+        user: user.data.id,
         type: data.type,
         text: data.text,
       };
-      console.log('newAwardStat', newAwardStat);
-      const response = await api.post('/awards/', newAwardStat);
-      console.log('response', response);
-      if (response.status === 201) {
-        const updatedAwards = await api.get(`/awards/?user=${user.id}`);
-        console.log('updatedAwards', updatedAwards);
-        dispatch(getMyUserAwards(updatedAwards.data));
+      const response = await createAward(newAward);
+      console.log('response onSubmit NewAwardForm', response);
+      // @ts-ignore
+      if (response.data) {
+        dispatch(getMyUserAwards(''));
         router.push('/profile');
       }
-      return response;
     } catch (error) {
       console.error('error', error);
     }
   };
+
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Form.Group className="mb-3" controlId="formAwardStatType">
@@ -73,4 +71,4 @@ const NewAwardRecognitionForm = () => {
   );
 };
 
-export default NewAwardRecognitionForm;
+export default NewAwardForm;

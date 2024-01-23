@@ -1,6 +1,7 @@
 import AuthHeader from '@/components/nav/AuthHeader';
 import { userLogout } from '@/lib/store/authSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/store/redux';
+import { User } from '@/types/user';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
@@ -10,12 +11,11 @@ const AuthLayout = ({ children }) => {
   const isLoggedIn = useAppSelector((state) => state.auth?.isLoggedIn);
   const router = useRouter();
   const data: any = useAppSelector((state) => state.auth);
-  const user: any = data.user.data;
+  const user: User = data?.user?.data;
 
   useEffect(() => {
-    if (!user || !isLoggedIn) {
-      router.push('/');
-      // dispatch(userLogout(user));
+    if (!user || !isLoggedIn || !localStorage.getItem('AUTHTOKEN')) {
+      router.push('/signin');
     }
   }, [user, isLoggedIn]);
 

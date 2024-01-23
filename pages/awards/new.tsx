@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import AuthLayout from '@/layouts/AuthLayout';
 import Container from 'react-bootstrap/Container';
-import NewAwardRecognitionForm from '@/components/forms/stats/NewAwardRecognitionForm';
+import NewAwardForm from '@/components/forms/stats/NewAwardForm';
 
 const NewAward = () => {
   return (
@@ -15,7 +15,7 @@ const NewAward = () => {
       <AuthLayout>
         <Container>
           <h2>Add New Award</h2>
-          <NewAwardRecognitionForm />
+          <NewAwardForm />
         </Container>
       </AuthLayout>
     </div>

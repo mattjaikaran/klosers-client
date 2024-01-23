@@ -8,13 +8,14 @@ import Button from 'react-bootstrap/Button';
 
 const References = ({ data }: { data: Reference[] }) => {
   const router = useRouter();
+
   return (
     <div className="mt-3">
       <h5>References</h5>
       <Row>
         {data?.length > 0 ? (
-          data.map((reference: Reference) => (
-            <Col key={reference.id} md={6}>
+          data?.map((reference: Reference) => (
+            <Col key={reference?.id} md={6}>
               <Card className="mb-3">
                 <Card.Body>
                   <Card.Title>

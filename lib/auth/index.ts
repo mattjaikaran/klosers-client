@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { useAppSelector } from '../store/redux';
 
 export interface UserProps {
   id: string;
@@ -16,10 +17,11 @@ export interface UserProps {
   role?: string;
   access?: string;
   token?: string;
+  refresh?: string;
 }
 
 export interface LoginFormInputs {
-  username: string;
+  email: string;
   password: string;
 }
 
@@ -44,15 +46,17 @@ export interface SignupResponseData {
   last_name: string;
   email: string;
 }
-import { useAppSelector } from '../store/redux';
 
 export const tokenHeaders = () => {
+  // get the user from the localStorage
+  // USER_KEY is the key for the user in localStorage
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { user }: any = useAppSelector((state) => state.auth);
   const headers = {
     'Content-Type': 'application/json',
     'X-CSRFToken': Cookies.get('csrftoken'),
-    Authorization: `Bearer ${user?.data?.token}`,
+    sessionid: Cookies.get('sessionid'),
+    Authorization: `Bearer ${user?.data?.access}`,
   };
   return headers;
 };
@@ -80,10 +84,16 @@ export async function useLogin(data: LoginFormInputs): Promise<any> {
 }
 
 export async function useLogout(user: UserProps): Promise<any> {
+  console.log('user', user);
+  // @ts-ignore
+  !user?.refresh?.length
+    ? // @ts-ignore
+      (user.refresh = localStorage.getItem('REFRESH_TOKEN').split('"')[1])
+    : null;
   try {
-    const response = await axios.post(`${API_URL}/auth/logout/`, user.token);
-    console.log('response', response);
-    if (response.status === 200) {
+    const response = await axios.post(`${API_URL}/logout/`, user);
+    console.log('response in useLogout', response);
+    if (response.status === 205) {
       localStorage.clear();
       return response;
     }
@@ -96,7 +106,7 @@ export async function useLogout(user: UserProps): Promise<any> {
 export async function useForgotPassword(email: string) {
   try {
     const data = { email: email.toLowerCase() };
-    const response = await axios.post(`${API_URL}/password/reset/`, data);
+    const response = await axios.post(`${API_URL}/forgot-password/`, data);
     console.log('response', response);
     return response.data;
   } catch (error: any) {
@@ -107,14 +117,11 @@ export async function useForgotPassword(email: string) {
 
 export async function usePasswordReset(data: PasswordResetInputs) {
   try {
-    const response = await axios.post(
-      `${API_URL}/password/reset/confirm/`,
-      data
-    );
+    const response = await axios.post(`${API_URL}/password-reset/`, data);
     console.log('response', response);
     return response.data;
   } catch (error: any) {
-    console.log('error in useForgotPassword', error);
+    console.log('error in usePasswordReset', error);
     return error.response;
   }
 }

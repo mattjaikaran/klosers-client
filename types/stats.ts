@@ -1,43 +1,3 @@
-export interface YTDStatInputs {
-  id?: string;
-  quota_verified?: boolean;
-  quarter: string;
-  company: string;
-  title: string;
-  market: string;
-  quota_attainment_percentage?: string;
-  avg_deal_size?: string;
-  avg_sales_cycle?: string;
-  average_deal_size?: string;
-  average_sales_cycle?: string;
-  industry?: string;
-  user?: string | number;
-}
-
-export interface CareerStatInputs {
-  id?: string;
-  quota_verified?: boolean;
-  year: string;
-  company: string;
-  title: string;
-  market: string;
-  quota_attainment_percentage?: string;
-  avg_deal_size?: string;
-  avg_sales_cycle?: string;
-  average_deal_size?: string;
-  average_sales_cycle?: string;
-  industry?: string;
-  user?: string | number;
-}
-
-export interface AwardRecognitionInputs {
-  id?: string;
-  type: string;
-  text: string;
-  user?: string | number;
-  user_data?: any;
-}
-
 // new Stat => refactored from YTD and Career stats to one stat
 export interface Stat {
   id?: string;
@@ -72,4 +32,44 @@ export interface LeaderboardStat {
   industry: string;
   user: string;
   user_data?: any;
+}
+
+export interface Award {
+  id?: string;
+  type: string;
+  text: string;
+  user?: string | number;
+  user_data?: any;
+}
+
+export interface YTDStatInputs {
+  id?: string;
+  quota_verified?: boolean;
+  quarter: string;
+  company: string;
+  title: string;
+  market: string;
+  quota_attainment_percentage?: string;
+  avg_deal_size?: string;
+  avg_sales_cycle?: string;
+  average_deal_size?: string;
+  average_sales_cycle?: string;
+  industry?: string;
+  user?: string | number;
+}
+
+export interface CareerStatInputs {
+  id?: string;
+  quota_verified?: boolean;
+  year: string;
+  company: string;
+  title: string;
+  market: string;
+  quota_attainment_percentage?: string;
+  avg_deal_size?: string;
+  avg_sales_cycle?: string;
+  average_deal_size?: string;
+  average_sales_cycle?: string;
+  industry?: string;
+  user?: string | number;
 }

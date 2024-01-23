@@ -34,6 +34,7 @@ import {
 import useAxios from '@/lib/utils/axios';
 import { industryChoices } from '../forms/stats/constants';
 import { useRouter } from 'next/router';
+import { useGetLeaderboardQuery } from '@/lib/store/statApi';
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -78,10 +79,23 @@ const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
 // }, {});
 
 const LeaderboardTable = () => {
-  const api = useAxios();
   const router = useRouter();
-  const [data, setData] = useState(() => []);
-  const rerender = useReducer(() => ({}), {})[1];
+  // get useGetLeaderboardQuery from statApi
+  // @ts-ignore
+  const { data: leaderboardData } = useGetLeaderboardQuery();
+  const [data, setData] = useState([]);
+  // const rerender = useReducer(() => ({}), {})[1];
+
+  useEffect(() => {
+    if (leaderboardData) {
+      // @ts-ignore
+      setData(leaderboardData?.results);
+    }
+  }, [leaderboardData]);
+
+  // console.log('leaderboardData', leaderboardData);
+  // @ts-ignore
+  // console.log('leaderboardData.results', leaderboardData?.results);
 
   const columnHelper = createColumnHelper<LeaderboardStat>();
   const columns = [
@@ -148,7 +162,6 @@ const LeaderboardTable = () => {
     columnHelper.accessor('user_data', {
       header: 'Actions',
       cell: (info) => {
-        console.log('info.getValue', info.getValue());
         return (
           <Dropdown>
             <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
@@ -173,19 +186,19 @@ const LeaderboardTable = () => {
     }),
   ];
 
-  useEffect(() => {
-    const renderLeaderboardData = async () => {
-      try {
-        const response = await api.get('/leaderboard/');
-        const leaderboardData = response.data;
-        console.log('leaderboardData', leaderboardData);
-        setData(leaderboardData);
-      } catch (error) {
-        console.log('error', error);
-      }
-    };
-    renderLeaderboardData();
-  }, []);
+  // useEffect(() => {
+  //   const renderLeaderboardData = async () => {
+  //     try {
+  //       const response = await api.get('/leaderboard/');
+  //       const leaderboardData = response.data;
+  //       console.log('leaderboardData', leaderboardData);
+  //       setData(leaderboardData);
+  //     } catch (error) {
+  //       console.log('error', error);
+  //     }
+  //   };
+  //   renderLeaderboardData();
+  // }, []);
 
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -212,8 +225,8 @@ const LeaderboardTable = () => {
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
-    debugTable: true,
-    debugHeaders: true,
+    debugTable: false,
+    debugHeaders: false,
     debugColumns: false,
   });
 

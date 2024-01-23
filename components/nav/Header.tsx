@@ -10,7 +10,7 @@ const Header = () => {
         <Navbar.Brand as={Link} href="/" className="with-marker mb-3 mb-lg-2">
           Klosers
         </Navbar.Brand>
-        <Navbar.Toggle className="mb-0" aria-controls="responsive-navbar-nav" />
+        {/* <Navbar.Toggle className="mb-0" aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link as={Link} href="/" className="mt-lg-3">
@@ -19,7 +19,7 @@ const Header = () => {
             <Nav.Link as={Link} href="/" className="mt-lg-3">
               About
             </Nav.Link>
-            {/* <Nav.Link as={Link} href="/" className="mt-lg-3">
+            <Nav.Link as={Link} href="/" className="mt-lg-3">
               Pricing
             </Nav.Link>
             <Nav.Link as={Link} href="/" className="mt-lg-3">
@@ -27,28 +27,28 @@ const Header = () => {
             </Nav.Link>
             <Nav.Link as={Link} href="/" className="mt-lg-3">
               Tool Kit
-            </Nav.Link> */}
+            </Nav.Link>
           </Nav>
           <Nav>
             <Nav.Link as={Link} href="/" className="mt-lg-3">
               Kloser Network
             </Nav.Link>
-            {/* <Nav.Link
+            <Nav.Link
               eventKey={2}
               as={Link}
               href="/leaderboard"
               className="mt-lg-3"
             >
               Kloser Leaderboard
-            </Nav.Link> */}
-            {/* <Nav.Link as={Link} href="/">
+            </Nav.Link>
+            <Nav.Link as={Link} href="/">
               Twitter
             </Nav.Link>
             <Nav.Link as={Link} href="/">
               LinkedIn
-            </Nav.Link> */}
+            </Nav.Link>
           </Nav>
-        </Navbar.Collapse>
+        </Navbar.Collapse> */}
       </Container>
     </Navbar>
   );

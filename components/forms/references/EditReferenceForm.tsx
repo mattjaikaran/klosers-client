@@ -1,82 +1,86 @@
-import { useAppDispatch, useAppSelector } from '@/lib/store/redux';
-import useAxios from '@/lib/utils/axios';
 import { useRouter } from 'next/router';
 import { SubmitHandler, useForm } from 'react-hook-form';
+
+import Alert from 'react-bootstrap/Alert';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
+
 import { Reference } from '@/types/user';
-import { useEffect, useState } from 'react';
-import { updateMyUserDetails } from '@/lib/store/authSlice';
+import {
+  useUpdateReferenceMutation,
+  useGetReferenceQuery,
+} from '@/lib/store/referenceApi';
 
 const EditReferenceForm = ({ reference }: { reference: string }) => {
-  const [referenceData, setReferenceData] = useState<Reference>(
-    {} as Reference
-  );
-  const api = useAxios();
   const router = useRouter();
-  const dispatch = useAppDispatch();
-  const { user }: any = useAppSelector((state) => state.auth);
+  const {
+    data: referenceData,
+    error: referencesError,
+    isLoading,
+  } = useGetReferenceQuery(reference);
 
-  useEffect(() => {
-    const renderReferenceData = async () => {
-      try {
-        const response = await api.get(`/references/${reference}/`);
-        console.log('response renderReferenceData', response);
-        console.log('response.data', response.data);
-        setReferenceData(response.data);
-      } catch (error) {
-        console.error('error', error);
-      }
-    };
-    if (reference) renderReferenceData();
-  }, [reference]);
+  const [updateReference] = useUpdateReferenceMutation();
+
+  console.log('referenceData', referenceData);
+  console.log('referencesError', referencesError);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Reference>({
-    // @ts-ignore
     defaultValues: referenceData,
   });
-
-  console.log('errors from react hook form', errors);
 
   const onSubmit: SubmitHandler<Reference> = async (data) => {
     try {
       console.log(data);
       const newReference = {
-        first_name: data.first_name || referenceData.first_name,
-        last_name: data.last_name || referenceData.last_name,
-        email: data.email || referenceData.email,
-        phone: data.phone || referenceData.phone,
+        id: referenceData?.id,
+        first_name:
+          !data.first_name.length ||
+          data.first_name === referenceData?.first_name
+            ? referenceData?.first_name
+            : data.first_name,
+        last_name:
+          !data.last_name.length || data.last_name === referenceData?.last_name
+            ? referenceData?.last_name
+            : data.last_name,
+        email:
+          !data.email.length || data.email === referenceData?.email
+            ? referenceData?.email
+            : data.email,
+        phone:
+          !data.phone.length || data.phone === referenceData?.phone
+            ? referenceData?.phone
+            : data.phone,
       };
-      console.log('newReference', newReference);
-      const response = await api.patch(
-        `/references/${reference}/`,
-        newReference
-      );
-      console.log('response', response);
-      if (response.status === 200) {
-        // update the user state via updateMyUserDetails
-        const updatedUser = await api.get(`/users/${user.data.id}/`);
-        console.log('updatedUser', updatedUser);
-        dispatch(updateMyUserDetails(updatedUser.data));
+      console.log('newReference onSubmit', newReference);
+      const updateReferenceResponse = await updateReference(newReference);
+      console.log('updateReferenceResponse', updateReferenceResponse);
+
+      // if updateReferenceResponse.data is true, redirect to profile page
+      // @ts-ignore
+      if (updateReferenceResponse.data) {
         router.push('/profile');
       }
-      return response;
-    } catch (error) {
-      console.error('error', error);
+    } catch (error: any) {
+      console.log('error onSubmit', error);
+      if (error.response) {
+        console.log('error.response', error.response);
+      }
     }
   };
   return (
     <>
+      {isLoading ? <Spinner /> : null}
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Form.Group className="mb-3" controlId="formReferenceFirstName">
           <Form.Label>First Name</Form.Label>
           <Form.Control
             type="text"
-            defaultValue={referenceData.first_name}
+            defaultValue={referenceData?.first_name}
             placeholder="Enter first name"
             {...register('first_name')}
           />
@@ -90,7 +94,7 @@ const EditReferenceForm = ({ reference }: { reference: string }) => {
           <Form.Label>Last Name</Form.Label>
           <Form.Control
             type="text"
-            defaultValue={referenceData.last_name}
+            defaultValue={referenceData?.last_name}
             placeholder="Enter last name"
             {...register('last_name')}
           />
@@ -104,7 +108,7 @@ const EditReferenceForm = ({ reference }: { reference: string }) => {
           <Form.Label>Email</Form.Label>
           <Form.Control
             type="email"
-            defaultValue={referenceData.email}
+            defaultValue={referenceData?.email}
             placeholder="Enter email"
             {...register('email')}
           />
@@ -118,7 +122,7 @@ const EditReferenceForm = ({ reference }: { reference: string }) => {
           <Form.Label>Phone Number</Form.Label>
           <Form.Control
             type="text"
-            defaultValue={referenceData.phone}
+            defaultValue={referenceData?.phone}
             placeholder="Enter phone number"
             {...register('phone')}
           />
@@ -134,13 +138,17 @@ const EditReferenceForm = ({ reference }: { reference: string }) => {
       </Form>
       {/* loop thru validation errors */}
       {Object.keys(errors).length > 0 && (
-        <ul>
-          {Object.keys(errors).map((keyName, i) => (
-            // @ts-ignore
-            <li key={i}>{errors[keyName].message}</li>
-          ))}
-        </ul>
+        <Alert className="mt-3" variant="danger">
+          <ul>
+            {Object.keys(errors).map((keyName, i) => (
+              // @ts-ignore
+              <li key={i}>{errors[keyName].message}</li>
+            ))}
+          </ul>
+        </Alert>
       )}
+      {/* @ts-ignore */}
+      {referencesError ? <p>{referencesError}</p> : null}
     </>
   );
 };

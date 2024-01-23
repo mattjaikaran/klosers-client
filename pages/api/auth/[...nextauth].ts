@@ -6,16 +6,21 @@ import GoogleProvider from 'next-auth/providers/google';
 const CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET;
 
-
-const BACKEND_ACCESS_TOKEN_LIFETIME = 45 * 60;            // 45 minutes
-const BACKEND_REFRESH_TOKEN_LIFETIME = 6 * 24 * 60 * 60;  // 6 days
+const BACKEND_ACCESS_TOKEN_LIFETIME = 45 * 60; // 45 minutes
+const BACKEND_REFRESH_TOKEN_LIFETIME = 6 * 24 * 60 * 60; // 6 days
 
 const getCurrentEpochTime = () => {
   return Math.floor(new Date().getTime() / 1000);
 };
 
 const SIGN_IN_HANDLERS: any = {
-  'credentials': async (user: any, account: any, profile: any, email: any, credentials: any) => {
+  credentials: async (
+    user: any,
+    account: any,
+    profile: any,
+    email: any,
+    credentials: any
+  ) => {
     return true;
   },
 };
@@ -35,7 +40,7 @@ const providers = [
     // You can specify whatever fields you are expecting to be submitted.
     // e.g. domain, username, password, 2FA token, etc.
     credentials: {
-      username: { label: 'Username', type: 'text',  },
+      username: { label: 'Username', type: 'text' },
       password: { label: 'Password', type: 'password' },
     },
     // @ts-ignore
@@ -78,10 +83,21 @@ async function getTokenFromAPI(type: string, user: any) {
   }
 }
 
-callbacks.signIn = async function signIn(
-  {user, account, profile, email, credentials, metadata}
-  : {user: any, account: any, profile: any, email: any, credentials: any, metadata: any,}
-) {
+callbacks.signIn = async function signIn({
+  user,
+  account,
+  profile,
+  email,
+  credentials,
+  metadata,
+}: {
+  user: any;
+  account: any;
+  profile: any;
+  email: any;
+  credentials: any;
+  metadata: any;
+}) {
   // if (account.provider === 'google') {
   //   const googleUser = {
   //     id: metadata.id,
@@ -96,12 +112,24 @@ callbacks.signIn = async function signIn(
 
   // return false;
   if (!SIGN_IN_PROVIDERS.includes(account.provider)) return false;
-      return SIGN_IN_HANDLERS[account.provider](
-        user, account, profile, email, credentials
-      );
+  return SIGN_IN_HANDLERS[account.provider](
+    user,
+    account,
+    profile,
+    email,
+    credentials
+  );
 };
 
-callbacks.jwt = async function jwt( {user, token, account}: {user: any, token: any, account: any}) {
+callbacks.jwt = async function jwt({
+  user,
+  token,
+  account,
+}: {
+  user: any;
+  token: any;
+  account: any;
+}) {
   // if (user) {
   //   token = { accessToken: user.accessToken };
   // }
@@ -109,7 +137,8 @@ callbacks.jwt = async function jwt( {user, token, account}: {user: any, token: a
   // return token;
   // If `user` and `account` are set that means it is a login event
   if (user && account) {
-    let backendResponse = account.provider === 'credentials' ? user : account.meta;
+    let backendResponse =
+      account.provider === 'credentials' ? user : account.meta;
     token['user'] = backendResponse.user;
     token['access_token'] = backendResponse.access;
     token['refresh_token'] = backendResponse.refresh;
@@ -132,9 +161,9 @@ callbacks.jwt = async function jwt( {user, token, account}: {user: any, token: a
   return token;
 };
 
-callbacks.session = async function session({token}: any) {
+callbacks.session = async function session({ token }: any) {
   return token;
-}
+};
 
 const options = {
   providers,
@@ -142,4 +171,4 @@ const options = {
 };
 
 // @ts-ignore
-export default NextAuth(options);
+// export default NextAuth(options);

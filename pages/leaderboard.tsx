@@ -8,8 +8,7 @@ export default function Leaderboard() {
   // get user from redux store
   const data: any = useAppSelector((state) => state.auth);
   const user: any = data.user.data;
-  console.log('user', user);
-  // if !user.leaderboard_access then redirect to dashboard
+
   if (!user.leaderboard_access) {
     return (
       <>

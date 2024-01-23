@@ -22,10 +22,9 @@ const AuthHeader = ({
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const response = await useLogout(user);
       console.log('response', response);
-
-      if (response.status === 200) {
-        router.push('/signin');
+      if (response.status === 205) {
         dispatch(userLogout(user));
+        router.push('/signin');
       }
       return response;
     } catch (error: any) {
@@ -39,7 +38,7 @@ const AuthHeader = ({
       <Container>
         <Navbar.Brand
           as={Link}
-          href="/dashboard"
+          href="/profile"
           className="with-marker mb-3 mb-lg-2"
         >
           Klosers
@@ -47,7 +46,7 @@ const AuthHeader = ({
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            {user.leaderboard_access ? (
+            {user?.leaderboard_access ? (
               <Nav.Link as={Link} href="/leaderboard" className="mt-lg-3">
                 Leaderboard
               </Nav.Link>

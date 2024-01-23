@@ -174,8 +174,8 @@ const StatsTable = ({ data }: { data: Stat[] }) => {
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
-    debugTable: true,
-    debugHeaders: true,
+    debugTable: false,
+    debugHeaders: false,
     debugColumns: false,
   });
 
@@ -214,7 +214,7 @@ const StatsTable = ({ data }: { data: Stat[] }) => {
           ))}
         </thead>
         <tbody>
-          {table.getRowModel().rows.length ? (
+          {table?.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => {
               return (
                 <tr key={row.id}>

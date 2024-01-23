@@ -38,7 +38,7 @@ const NewIntroForm = () => {
         if (error.response) {
           console.log('error.response', error.response);
           console.log('error.response.data', error.response.data);
-          setError(error.response.data.detail);
+          setError(error.response.data);
         }
       }
     };

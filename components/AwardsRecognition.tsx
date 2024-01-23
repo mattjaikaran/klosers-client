@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router';
 import Button from 'react-bootstrap/Button';
-import { AwardRecognitionInputs } from '@/types/stats';
+import { Award } from '@/types/stats';
 import { useAppSelector } from '@/lib/store/redux';
 import Link from 'next/link';
 
-const AwardsRecognition = ({ data }: { data: AwardRecognitionInputs[] }) => {
+const AwardsRecognition = ({ data }: { data: Award[] }) => {
   const router = useRouter();
   const auth: any = useAppSelector((state) => state.auth);
   const { user }: any = useAppSelector((state) => state.user);
@@ -13,7 +13,7 @@ const AwardsRecognition = ({ data }: { data: AwardRecognitionInputs[] }) => {
     <div className="mt-3">
       <h5>Awards &amp; Recognition</h5>
       {data?.length ? (
-        data.map((award: AwardRecognitionInputs) => (
+        data.map((award: Award) => (
           <p key={award.id}>
             {router.pathname === '/profile' ? (
               <>

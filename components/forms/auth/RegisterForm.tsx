@@ -12,67 +12,104 @@ import Alert from 'react-bootstrap/Alert';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
-const schema = yup
+const newUserSchema = yup
   .object({
+    first_name: yup
+      .string()
+      .min(2, 'First name must be at least 2 characters')
+      .required('First name is required'),
+    last_name: yup
+      .string()
+      .min(2, 'Last name must be at least 2 characters')
+      .required('Last name is required'),
     username: yup.string().required(),
-    email: yup.string().required('Email is required').email('Email is invalid'),
-    password1: yup
+    email: yup
+      .string()
+      .email('Please enter a valid email address')
+      .required('Email is required'),
+    password: yup
       .string()
       .min(6, 'Password must be at least 6 characters')
       .required('Password is required'),
-    password2: yup
+    password_confirmation: yup
       .string()
-      .oneOf([yup.ref('password1')], 'Passwords must match')
-      .required('Confirm Password is required'),
+      .oneOf([yup.ref('password')], 'Passwords must match')
+      .required('Password confirmation is required'),
   })
   .required();
 
 const RegisterForm = () => {
   const router = useRouter();
-  const [errorMessage, setErrorMessage] = useState<any>('');
+  const [alert, setAlert] = useState('');
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterFormInputs>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(newUserSchema),
   });
 
   const onSubmit: SubmitHandler<RegisterFormInputs> = async (data) => {
+    console.log('data onSubmit', data);
+    setAlert('');
+    const updatedData = {
+      first_name: data.first_name,
+      last_name: data.last_name,
+      email: data.email,
+      username: data.username,
+      password: data.password,
+    };
+    console.log('updatedData', updatedData);
     try {
-      console.log('data in onSubmit', data);
-      const userInfo = {
-        email: data.email,
-        username: data.username,
-        password1: data.password1,
-        password2: data.password2,
-      };
-
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      const registerResponse = await useSignup(userInfo);
-      console.log('registerResponse', registerResponse);
-      if (registerResponse.status === 400) {
-        if (registerResponse.data?.email) {
-          setErrorMessage(registerResponse.data?.email);
+      if (data.password === data.password_confirmation) {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        const response = await useSignup(updatedData);
+        console.log('response useSignup', response);
+        console.log('response.status', response.status);
+        if (response.status === 400) {
+          console.log('response.status', response.status);
+          response.data.error
+            ? setAlert(response.data.error)
+            : setAlert('Error. Try Again.');
         }
+        if (response.status === 401 || response.status === 500) {
+          response.data.detail
+            ? setAlert(response.data.detail)
+            : setAlert('Error creating new user. Please try again');
+        }
+        if (response.status === 201) {
+          console.log('response 201', response);
+          router.push('/signin');
+        }
+      } else {
+        setAlert('Passwords do not match');
       }
-      if (registerResponse.status === 201) {
-        return router.push('/signin');
-      }
-      return registerResponse;
-    } catch (error: any) {
+    } catch (error) {
+      console.error('errors', errors); // error from react hook form
       console.error('error', error);
-      const signupError = error.response.data.detail
-        ? error.response.data.detail
-        : error.response.data;
-      setErrorMessage(signupError);
-      return error;
+      setAlert('Error creating new user. Please try again');
     }
   };
 
   return (
     <>
-      <Form validated={!errors} onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form.Group className="mb-3" controlId="registerFirstName">
+          <Form.Label>First Name</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="First Name"
+            {...register('first_name')}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="registerLastName">
+          <Form.Label>Last Name</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Last Name"
+            {...register('last_name')}
+          />
+        </Form.Group>
         <Form.Group className="mb-3" controlId="registerFormEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control
@@ -90,48 +127,51 @@ const RegisterForm = () => {
           />
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="registerFormPassword1">
+        <Form.Group className="mb-3" controlId="registerFormPassword">
           <Form.Label>Password</Form.Label>
           <Form.Control
             type="password"
             placeholder="Password"
-            {...register('password1')}
+            {...register('password')}
           />
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="registerFormPassword2">
+        <Form.Group
+          className="mb-3"
+          controlId="registerFormPasswordConfirmation"
+        >
           <Form.Label>Password Confirmation</Form.Label>
           <Form.Control
             type="password"
             placeholder="Password"
-            {...register('password2')}
+            {...register('password_confirmation')}
           />
         </Form.Group>
 
+        {Object.keys(errors).length > 0 && (
+          <div className="alert alert-danger m-1">
+            Please fix the following:
+            <ul>
+              {Object.keys(errors).map((field) => (
+                <li key={field}>
+                  {/* @ts-ignore */}
+                  {errors[field as keyof RegisterFormInputs]?.message}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
         <Button variant="primary" type="submit">
-          Submit
+          Sign Up
         </Button>
       </Form>
-      {Object.values(errors).length ? (
-        <Alert className="mt-3" variant="danger">
-          {errors.username
-            ? errors.username.message
-            : errors.email
-            ? errors.email.message
-            : errors.password1
-            ? errors.password1.message
-            : errors.password2
-            ? errors.password2.message
-            : ''}
-        </Alert>
-      ) : null}
-      {errorMessage ? (
-        <Alert className="mt-3" variant="danger">
-          {errorMessage}
+      {alert ? (
+        <Alert className="mt-3" variant="danger" dismissible>
+          {alert}
         </Alert>
       ) : null}
 
-      <div className="mt-5">
+      <div className="mt-3">
         <Link href="/signin">Already have an account?</Link>
       </div>
     </>

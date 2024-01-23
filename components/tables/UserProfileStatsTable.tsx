@@ -71,6 +71,8 @@ const UserProfileStatsTable = ({ data }: { data: Stat[] }) => {
   const auth: any = useAppSelector((state) => state.auth);
   const { user }: any = useAppSelector((state) => state.user);
 
+  console.log('data props in userprofilestatstable', data);
+
   const columnHelper = createColumnHelper<Stat>();
   const columns = [
     columnHelper.accessor('quota_verified', {
@@ -162,8 +164,8 @@ const UserProfileStatsTable = ({ data }: { data: Stat[] }) => {
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
-    debugTable: true,
-    debugHeaders: true,
+    debugTable: false,
+    debugHeaders: false,
     debugColumns: false,
   });
 

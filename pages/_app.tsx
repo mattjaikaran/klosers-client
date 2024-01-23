@@ -3,19 +3,19 @@ import type { AppProps } from 'next/app';
 import { Provider } from 'react-redux';
 import { store, persistor } from '@/lib/store';
 import { PersistGate } from 'redux-persist/integration/react';
-import { SessionProvider } from 'next-auth/react';
+import ThemeProvider from 'react-bootstrap/ThemeProvider';
 
 export default function App({
   Component,
-  pageProps: { session, ...pageProps },
+  pageProps: { ...pageProps },
 }: AppProps) {
   return (
     <Provider store={store}>
-      <SessionProvider session={session}>
-        <PersistGate loading={null} persistor={persistor}>
+      <PersistGate loading={null} persistor={persistor}>
+        <ThemeProvider>
           <Component {...pageProps} />
-        </PersistGate>
-      </SessionProvider>
+        </ThemeProvider>
+      </PersistGate>
     </Provider>
   );
 }

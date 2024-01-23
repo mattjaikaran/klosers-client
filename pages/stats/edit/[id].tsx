@@ -4,11 +4,18 @@ import { useAppSelector } from '@/lib/store/redux';
 import AuthLayout from '@/layouts/AuthLayout';
 import Container from 'react-bootstrap/Container';
 import EditStatForm from '@/components/forms/stats/EditStatForm';
+import { useGetStatQuery } from '@/lib/store/statApi';
+import { Stat } from '@/types/stats';
 
 const EditStatPage = ({ id }: { id?: string }) => {
   const router = useRouter();
-  const { user }: any = useAppSelector((state) => state.auth);
-  console.log('user', user);
+
+  const statId: any = router.query.id;
+
+  const { data: statData, error: statError } = useGetStatQuery(statId);
+
+  console.log('statData', statData);
+  console.log('statError', statError);
   return (
     <div>
       <Head>
@@ -19,10 +26,11 @@ const EditStatPage = ({ id }: { id?: string }) => {
       </Head>
       <AuthLayout>
         <Container>
-          <p>edit stat page wip</p>
+          {statError ? <p>Error fetching stat</p> : null}
           <EditStatForm
             item={
-              user.stats.filter((stat: any) => stat.id === router.query.id)[0]
+              // @ts-ignore
+              statData?.results?.filter((stat: Stat) => stat.id === statId)[0]
             }
           />
         </Container>

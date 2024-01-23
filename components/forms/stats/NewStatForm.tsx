@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import useAxios from '@/lib/utils/axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
@@ -33,6 +34,7 @@ const schema = yup.object().shape({
 const NewStatForm = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const [error, setError] = useState('');
   const {
     register,
     handleSubmit,
@@ -48,6 +50,7 @@ const NewStatForm = () => {
   console.log('errors', errors);
 
   const onSubmit: SubmitHandler<Stat> = async (data) => {
+    setError('');
     try {
       console.log(data);
       const newCareerStat = {
@@ -77,8 +80,32 @@ const NewStatForm = () => {
         router.push('/profile');
       }
       return response;
-    } catch (error) {
+    } catch (error: any) {
       console.error('error', error);
+      if (error.response) {
+        console.log('error.response', error.response);
+        if (error.response.data.market) {
+          setError(error.response.data.market);
+        }
+        if (error.response.data.title) {
+          setError(error.response.data.title);
+        }
+        if (error.response.data.quota) {
+          setError(error.response.data.quota);
+        }
+        if (error.response.data.quota_attainment_percentage) {
+          setError(error.response.data.quota_attainment_percentage);
+        }
+        if (error.response.data.average_deal_size) {
+          setError(error.response.data.average_deal_size);
+        }
+        if (error.response.data.average_sales_cycle) {
+          setError(error.response.data.average_sales_cycle);
+        }
+        if (error.response.data.industry) {
+          setError(error.response.data.industry);
+        }
+      }
     }
   };
   return (
@@ -207,6 +234,11 @@ const NewStatForm = () => {
           </ul>
         </Alert>
       )}
+      {error ? (
+        <Alert className="mt-3" variant="danger">
+          {error}
+        </Alert>
+      ) : null}
     </>
   );
 };

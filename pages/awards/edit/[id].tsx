@@ -1,14 +1,19 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useAppSelector } from '@/lib/store/redux';
 import AuthLayout from '@/layouts/AuthLayout';
 import Container from 'react-bootstrap/Container';
-import EditAwardRecognitionForm from '@/components/forms/stats/EditAwardRecognitionForm';
+import EditAwardForm from '@/components/forms/stats/EditAwardForm';
+import { useGetAwardQuery } from '@/lib/store/awardApi';
 
 const EditAward = () => {
   const router = useRouter();
-  const { user }: any = useAppSelector((state) => state.auth);
-  console.log('user', user);
+  const awardId: any = router.query.id;
+
+  const { data: awardData, error: awardError } = useGetAwardQuery(awardId);
+
+  console.log('awardData', awardData);
+  console.log('awardError', awardError);
+
   return (
     <div>
       <Head>
@@ -20,11 +25,12 @@ const EditAward = () => {
       <AuthLayout>
         <Container>
           <h2>Add Edit Award</h2>
-          <EditAwardRecognitionForm
-            item={
-              user.awards.filter((stat: any) => stat.id === router.query.id)[0]
-            }
-          />
+          {awardError ? (
+            <p>There was an error getting the award</p>
+          ) : (
+            // @ts-ignore
+            <EditAwardForm item={awardData} />
+          )}
         </Container>
       </AuthLayout>
     </div>

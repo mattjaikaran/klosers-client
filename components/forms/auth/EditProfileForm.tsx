@@ -6,23 +6,23 @@ import { useAppDispatch } from '@/lib/store/redux';
 import Alert from 'react-bootstrap/Alert';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import useAxios from '@/lib/utils/axios';
 import { updateMyUserDetails } from '@/lib/store/authSlice';
+import { useUpdateUserMutation } from '@/lib/store/userApi';
 
 const EditProfileForm = ({ user }: { user: User }) => {
-  const api = useAxios();
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [error, setError] = useState('');
   const { register, handleSubmit } = useForm<User>({
     defaultValues: user,
   });
+  const [updateUser, { isLoading }] = useUpdateUserMutation();
 
   const onSubmit: SubmitHandler<User> = async (data) => {
     setError('');
     try {
-      console.log('data in onsubmit EditProfileForm', data);
       const updatedUserData = {
+        id: data.id,
         username: data.username,
         email: data.email,
         first_name: data.first_name,
@@ -35,19 +35,21 @@ const EditProfileForm = ({ user }: { user: User }) => {
         img_url: data.img_url,
         user_status: data.user_status ?? user.user_status,
       };
-      const response = await api.patch(`/users/${user.id}/`, updatedUserData);
-      console.log('response', response);
+      const response = await updateUser(updatedUserData);
+      console.log('response EditProfileForm submit', response);
 
-      if (response.status === 200) {
-        dispatch(updateMyUserDetails(data));
+      if (error) {
+        // @ts-ignore
+        setError(error.message);
+      }
+      if (!isLoading && !error) {
+        // @ts-ignore
+        dispatch(updateMyUserDetails(response.data));
         router.push('/profile');
       }
-      return response;
     } catch (error: any) {
-      console.log('error in onSubmit - EditProfileForm', error);
-      if (error.response) {
-        console.log(error.response.data);
-      }
+      console.error('error', error);
+      setError(error.message);
     }
   };
 
