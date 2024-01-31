@@ -2,12 +2,12 @@
 import { useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useAppDispatch, useAppSelector } from '@/lib/store/redux';
-import {
-  userDetails,
-  getUserStats,
-  getUserAwards,
-} from '@/lib/store/userSlice';
+// import { useAppDispatch, useAppSelector } from '@/lib/store/redux';
+// import {
+//   userDetails,
+//   getUserStats,
+//   getUserAwards,
+// } from '@/lib/store/userSlice';
 
 import AuthLayout from '@/layouts/AuthLayout';
 import Container from 'react-bootstrap/Container';
@@ -25,8 +25,7 @@ import { useGetUserStatsQuery } from '@/lib/store/statApi';
 import { useGetUserAwardsQuery } from '@/lib/store/awardApi';
 import { useFetchUserQuery } from '@/lib/store/userApi';
 import { User } from '@/types/user';
-import { Award, Stat } from '@/types/stats';
-import { UserProps } from '@/lib/auth';
+import { Stat } from '@/types/stats';
 
 export default function UserProfile() {
   const router = useRouter();
@@ -42,7 +41,6 @@ export default function UserProfile() {
   const userDetails = userData?.results.filter(
     (user: User) => user.username === router.query.slug
   )[0];
-
   console.log('userDetails', userDetails);
 
   const {
@@ -51,6 +49,13 @@ export default function UserProfile() {
     refetch: refetchStats,
     // @ts-ignore
   } = useGetUserStatsQuery(userDetails?.username);
+
+  // @ts-ignore
+  const userStats = stats?.results.filter(
+    (stat: any) => stat.user_data.username === router.query.slug
+  );
+  console.log('userStats', userStats);
+
   // @ts-ignore
   const {
     data: awards,
@@ -64,7 +69,7 @@ export default function UserProfile() {
     refetchUser();
     refetchAwards();
     refetchStats();
-  }, [refetchUser, refetchAwards, refetchStats, userDetails?.id]);
+  }, [refetchUser, refetchAwards, refetchStats, router.query.slug]);
 
   return (
     <>
@@ -144,7 +149,7 @@ export default function UserProfile() {
           )}
           <h5>Stats</h5>
           {/* @ts-ignore */}
-          <UserProfileStatsTable data={stats?.results || []} />
+          <UserProfileStatsTable data={stats?.results ? userStats : []} />
           {/* @ts-ignore */}
           <AwardsRecognition data={awards?.results || []} />
           {/* @ts-ignore */}
