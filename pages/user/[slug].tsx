@@ -1,13 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
+import Link from 'next/link';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-// import { useAppDispatch, useAppSelector } from '@/lib/store/redux';
-// import {
-//   userDetails,
-//   getUserStats,
-//   getUserAwards,
-// } from '@/lib/store/userSlice';
 
 import AuthLayout from '@/layouts/AuthLayout';
 import Container from 'react-bootstrap/Container';
@@ -19,13 +14,12 @@ import Spinner from 'react-bootstrap/Spinner';
 import AwardsRecognition from '@/components/AwardsRecognition';
 import UserProfileStatsTable from '@/components/tables/UserProfileStatsTable';
 import avatar from '@/assets/images/avatar-placeholder.png';
-import Link from 'next/link';
+
 import References from '@/components/References';
 import { useGetUserStatsQuery } from '@/lib/store/statApi';
 import { useGetUserAwardsQuery } from '@/lib/store/awardApi';
 import { useFetchUserQuery } from '@/lib/store/userApi';
 import { User } from '@/types/user';
-import { Stat } from '@/types/stats';
 
 export default function UserProfile() {
   const router = useRouter();
@@ -62,8 +56,13 @@ export default function UserProfile() {
     isFetching: awardsIsFetching,
     refetch: refetchAwards,
   } = useGetUserAwardsQuery(userDetails?.username);
-
   console.log('awards', awards);
+
+  // @ts-ignore
+  const userAwards = awards?.results.filter(
+    (award: any) => award.user_data.username === router.query.slug
+  );
+  console.log('userAwards', userAwards);
 
   useEffect(() => {
     refetchUser();
@@ -90,20 +89,17 @@ export default function UserProfile() {
               <p>
                 <Link href="/profile">Go back to Profile</Link>
               </p>
-              {/* {setTimeout(() => {
-                router.push('/profile');
-              }, 3000)} */}
             </>
           ) : (
             <Row>
-              <Col>
+              <Col className="mb-3">
                 <Image
                   src={userDetails?.img_url ?? avatar.src}
                   className="img-fluid"
                   alt="avatar placeholder"
                 />
               </Col>
-              <Col>
+              <Col className="mb-3">
                 <p>
                   <strong>Name: </strong>
                   <span>
@@ -141,7 +137,7 @@ export default function UserProfile() {
                 Message
                </Button> */}
               </Col>
-              <Col md={6}>
+              <Col md={6} className="mb-3">
                 <h4>About</h4>
                 <p>{userDetails?.about}</p>
               </Col>
@@ -151,7 +147,7 @@ export default function UserProfile() {
           {/* @ts-ignore */}
           <UserProfileStatsTable data={stats?.results ? userStats : []} />
           {/* @ts-ignore */}
-          <AwardsRecognition data={awards?.results || []} />
+          <AwardsRecognition data={awards?.results ? userAwards : []} />
           {/* @ts-ignore */}
           <References data={userDetails?.references || []} />
         </Container>

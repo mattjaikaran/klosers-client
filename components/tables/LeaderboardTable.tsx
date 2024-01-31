@@ -91,7 +91,7 @@ const LeaderboardTable = () => {
       // @ts-ignore
       setData(leaderboardData?.results);
     }
-  }, [leaderboardData]);
+  }, []);
 
   // console.log('leaderboardData', leaderboardData);
   // @ts-ignore
