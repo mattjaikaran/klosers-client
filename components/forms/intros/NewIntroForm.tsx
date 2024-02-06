@@ -117,9 +117,9 @@ const NewIntroForm = () => {
             Submit
           </Button>
         </Form>
-        {successMessage ? (
+        {successMessage.length ? (
           <Alert variant="success" className="mt-3">
-            {error}
+            {successMessage}
           </Alert>
         ) : null}
         {error.length ? (
