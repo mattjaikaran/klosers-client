@@ -13,6 +13,7 @@ import { Intro } from '@/types/user';
 const NewIntroForm = () => {
   const [salesRep, setSalesRep] = useState<any>({});
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const api = useAxios();
   const router = useRouter();
   const { user }: any = useAppSelector((state) => state.auth);
@@ -34,7 +35,6 @@ const NewIntroForm = () => {
         }
       } catch (error: any) {
         console.log('error', error);
-
         if (error.response) {
           console.log('error.response', error.response);
           console.log('error.response.data', error.response.data);
@@ -70,7 +70,12 @@ const NewIntroForm = () => {
       const response = await api.post('/intros/', newIntro);
       console.log('response', response);
       if (response.status === 201) {
-        router.push('/leaderboard');
+        setSuccessMessage(
+          'Message sent successfully. Redirecting you to the leaderboard'
+        );
+        setTimeout(() => {
+          router.push('/leaderboard');
+        }, 3000);
       }
       if (response.status === 500) {
         setError('Something went wrong. Redirecting you to the leaderboard');
@@ -112,6 +117,11 @@ const NewIntroForm = () => {
             Submit
           </Button>
         </Form>
+        {successMessage ? (
+          <Alert variant="success" className="mt-3">
+            {error}
+          </Alert>
+        ) : null}
         {error.length ? (
           <Alert variant="danger" className="mt-3">
             {error}
